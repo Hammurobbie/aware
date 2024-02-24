@@ -27,7 +27,7 @@ async def add_activity(activity: Activity):
 
 
 @router.get("/activities")
-async def read_actvities():
+async def read_activities():
     with Session(engine) as session:
         statement = select(Activity, ActivityCategory).join(
             ActivityCategory, isouter=True
@@ -38,12 +38,12 @@ async def read_actvities():
             act.category = None if not act_cat else act_cat.name
             result.append(act)
         if not results:
-            raise HTTPException(status_code=404, detail="No acyivity table/array found")
+            raise HTTPException(status_code=404, detail="No activity table/array found")
         return result
 
 
 @router.get("/activities/{id}")
-async def read_actvity(id: int):
+async def read_activity(id: int):
     with Session(engine) as session:
         statement = (
             select(Activity, ActivityCategory)
@@ -82,7 +82,7 @@ async def update_activity(id: int, activity: Activity):
 
 
 @router.delete("/activities/{id}")
-async def delete_actvity(id: int):
+async def delete_activity(id: int):
     with Session(engine) as session:
         activity = session.get(Activity, id)
         if not activity:
