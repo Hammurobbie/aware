@@ -13,7 +13,7 @@ async function getData() {
   return res.json();
 }
 
-export default async function Checkin() {
+export default async function Monitor() {
   const data = await getData();
   console.log("fuggem", data);
   return (
