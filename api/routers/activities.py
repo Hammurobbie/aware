@@ -23,7 +23,7 @@ async def add_activity(activity: Activity):
         )
         session.add(new_activity)
         session.commit()
-        return "activity successfully added"
+        return "Activity successfully added"
 
 
 @router.get("/activities")
@@ -78,7 +78,7 @@ async def update_activity(id: int, activity: Activity):
             )
         session.commit()
         session.refresh(selected_activity)
-        return "activity successfully updated"
+        return "Activity successfully updated"
 
 
 @router.delete("/activities/{id}")
@@ -89,7 +89,7 @@ async def delete_activity(id: int):
             raise HTTPException(status_code=404, detail="Activity not found")
         session.delete(activity)
         session.commit()
-        return "activity successfully deleted"
+        return "Activity successfully deleted"
 
 
 async def add_activity_category(category: str):

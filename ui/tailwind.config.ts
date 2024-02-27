@@ -23,6 +23,13 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      boxShadow: {
+        harsh: "8px 8px 0 0 var(--dark)",
+        "harsh-tight": "5px 5px 0 0 var(--dark)",
+      },
+      dropShadow: {
+        harsh: "1px 1px 0 var(--dark)",
+      },
     },
   },
   plugins: [],

@@ -1,13 +1,12 @@
 from typing import Optional, List
-from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 
 
 class Activity(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
-    start: Optional[datetime] = None
-    stop: Optional[datetime] = None
+    start: Optional[str] = None
+    stop: Optional[str] = None
     category: Optional[str] = None
 
     category_id: Optional[int] = Field(default=None, foreign_key="activitycategory.id")
@@ -16,7 +15,6 @@ class Activity(SQLModel, table=True):
 class ActivityCategory(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
-    # type: Optional[str]  # productive, relaxing, fun etc. maybe nix this
 
 
 class EmotionCheckLink(SQLModel, table=True):

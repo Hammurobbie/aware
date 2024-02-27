@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --text: #b58167;
-  --bg: #deba99;
-  --bg-secondary: #d9ba8c;
-  --success: #4c843e;
-  --error: #b53930;
-  --dark: #1c3202;
-  --light: #e3d2cc;
-  --grayscale: #8c6e68;
+  --text: #a69388;
+  --bg: #e8e1ca;
+  --bg-secondary: #e5ceb6;
+  --success: #5b7c6b;
+  --error: #c2493d;
+  --dark: #483b32;
+  --light: #f8f1e1;
+  --grayscale: #666160;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -31,4 +31,14 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.button {
+  @apply shadow-harsh-tight active:shadow-inner active:translate-y-1 active:translate-x-1 transition-transform;
+}
+
+input,
+select,
+button {
+  @apply focus:outline-success;
 }
