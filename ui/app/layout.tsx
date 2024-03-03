@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="overscroll-none" lang="en">
+    <html lang="en">
       <body
         className={`overscroll-none ${oldComputer.className} ${vintageClass}`}
       >
