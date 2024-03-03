@@ -17,9 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html className="overflow-hidden h-full overscroll-none" lang="en">
       <body
-        className={`overscroll-none ${oldComputer.className} ${vintageClass}`}
+        className={`h-full overflow-auto overscroll-none ${oldComputer.className} ${vintageClass}`}
       >
         {children}
         <FooterNav />
