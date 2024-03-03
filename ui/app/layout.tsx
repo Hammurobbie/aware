@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import FooterNav from "./components/FooterNav";
 
 const oldComputer = localFont({ src: "./fonts/old_computer.woff" });
 const vintageClass = "blur-[0.04cap]";
@@ -17,7 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${oldComputer.className} ${vintageClass}`}>
+      <body className={`h-full ${oldComputer.className} ${vintageClass}`}>
+        <FooterNav />
         {children}
       </body>
     </html>

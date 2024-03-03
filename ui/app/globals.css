@@ -42,3 +42,9 @@ select,
 button {
   @apply focus:outline-success;
 }
+
+input[name^="category_id"]::-webkit-calendar-picker-indicator {
+  opacity: 100;
+  margin-bottom: 7px;
+  cursor: pointer;
+}
