@@ -1,13 +1,9 @@
 import ActivityInput from "./components/ActivityInput";
 
 async function getData() {
-  const res = await fetch("http://127.0.0.1:8000/activity_categories/", {
+  const res = await fetch("http://127.0.0.1:8000/activity_categorie", {
     next: { tags: ["activity_categories"] },
-  });
-
-  if (!res?.ok) {
-    throw new Error("Failed to fetch data");
-  }
+  }).catch((err) => console.log(err));
 
   return res?.json();
 }
