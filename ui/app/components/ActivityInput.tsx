@@ -104,7 +104,7 @@ const ActivityInput = (data: any) => {
         ) : null}
         {success ? <p className="text-success mb-2">Nice, got it</p> : null}
         <div className="p-5 bg-grayscale rounded-sm shadow-harsh">
-          <h2 className="text-xl text-light">What're you doing?</h2>
+          <h2 className="text-xl text-light">{"What're you doing?"}</h2>
           <form onSubmit={handleSubmitActivity} className="flex flex-col">
             <label className="mt-2 text-start text-bg-secondary" htmlFor="name">
               Activity name
