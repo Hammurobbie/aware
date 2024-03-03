@@ -9,7 +9,7 @@ database.db
 bin/
 build/
 develop-eggs/
-# /node_modules
+/node_modules
 dist/
 eggs/
 lib/
