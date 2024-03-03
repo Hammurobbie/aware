@@ -17,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`h-full ${oldComputer.className} ${vintageClass}`}>
-        <FooterNav />
+    <html className="overflow-hidden h-full" lang="en">
+      <body
+        className={`h-full overflow-auto ${oldComputer.className} ${vintageClass}`}
+      >
         {children}
+        <FooterNav />
       </body>
     </html>
   );
