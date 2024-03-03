@@ -5,17 +5,17 @@ async function getData() {
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
-  if (!res.ok) {
+  if (!res?.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch data");
   }
 
-  return res.json();
+  return res?.json();
 }
 
 export default async function Monitor() {
   const data = await getData();
-  console.log("fuggem", data);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="max-w-5xl w-full flex flex-wrap">

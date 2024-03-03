@@ -5,11 +5,11 @@ async function getData() {
     next: { tags: ["activity_categories"] },
   });
 
-  if (!res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to fetch data");
   }
 
-  return res.json();
+  return res?.json();
 }
 
 export default async function Dashboard() {
