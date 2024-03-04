@@ -12,7 +12,7 @@ const FooterNav = () => {
     "settings",
   ];
   return (
-    <header className="sticky bottom-0 z-10 flex justify-center items-center w-full h-16 bg-bg-secondary text-grayscale border-t-4 border-error">
+    <header className="sticky bottom-0 z-10 flex justify-center items-center w-full h-16 bg-bg-secondary text-grayscale border-t-4 border-error shadow-[var(--error)_0_0_10px_0px]">
       <div className="flex justify-around items-center w-full max-w-2xl mx-auto">
         {pages.map((p, i) => {
           const isLogo = typeof p !== "string";
