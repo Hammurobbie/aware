@@ -53,6 +53,5 @@ input[type="date"] {
   display: block;
   width: 100%;
   padding: 8px;
-  -webkit-appearance: textfield;
-  -moz-appearance: textfield;
+  -webkit-appearance: none !important;
 }
