@@ -49,9 +49,6 @@ input[name^="category_id"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-input[type="date"] {
-  display: block;
-  width: 100% !important;
-  padding: 8px !important;
-  -webkit-appearance: none !important;
+input[type="datetime-local"] {
+  appearance: none;
 }
