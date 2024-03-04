@@ -8,7 +8,7 @@ const FooterNav = () => {
   const curPage = usePathname()?.substring(1);
   const pages = [
     "monitor",
-    <Image priority alt="logo" src={logo} width={100} />,
+    <Image key="logo_key" priority alt="logo" src={logo} width={100} />,
     "settings",
   ];
   return (
@@ -18,17 +18,16 @@ const FooterNav = () => {
           const isLogo = typeof p !== "string";
           const isCurPage = isLogo && !curPage ? true : curPage === p;
           return (
-            <div key={i}>
-              <Link
-                href={isLogo ? "/" : p}
-                className={isCurPage ? "animate-pulse transition-all" : ""}
-              >
-                {!isLogo ? (
-                  <span className={isCurPage ? "text-error" : ""}>_</span>
-                ) : null}
-                {p}
-              </Link>
-            </div>
+            <Link
+              key={i}
+              href={isLogo ? "/" : p}
+              className={isCurPage ? "animate-pulse transition-all" : ""}
+            >
+              {!isLogo ? (
+                <span className={isCurPage ? "text-error" : ""}>_</span>
+              ) : null}
+              {p}
+            </Link>
           );
         })}
       </div>
