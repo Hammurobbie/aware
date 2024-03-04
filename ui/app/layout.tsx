@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import localFont from "next/font/local";
-import FooterNav from "./components/FooterNav";
+import "./globals.css";
 
+import FooterNav from "./components/FooterNav";
 const oldComputer = localFont({ src: "./fonts/old_computer.woff" });
 const vintageClass = "blur-[0.04cap]";
 

@@ -48,3 +48,7 @@ input[name^="category_id"]::-webkit-calendar-picker-indicator {
   margin-bottom: 7px;
   cursor: pointer;
 }
+
+input[type="date"] {
+  appearance: none;
+}
