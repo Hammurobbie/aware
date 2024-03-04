@@ -51,4 +51,5 @@ input[name^="category_id"]::-webkit-calendar-picker-indicator {
 
 input[type="datetime-local"] {
   appearance: none;
+  min-height: 42px;
 }

@@ -13,6 +13,9 @@ export default async function Settings() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <h1 className="text-4xl font-bold mt-4 mb-8 drop-shadow-harsh text-center text-balance">
+        Settings
+      </h1>
       <div className="max-w-5xl w-full flex flex-wrap">
         {data?.map((wbc: any, key: number) => (
           <div
