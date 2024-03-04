@@ -8,7 +8,7 @@ const FooterNav = () => {
   const curPage = usePathname()?.substring(1);
   const pages = [
     "monitor",
-    <Image alt="logo" src={logo} width={100} />,
+    <Image priority alt="logo" src={logo} width={100} />,
     "settings",
   ];
   return (

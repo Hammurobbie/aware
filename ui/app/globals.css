@@ -51,6 +51,8 @@ input[name^="category_id"]::-webkit-calendar-picker-indicator {
 
 input[type="date"] {
   display: block;
+  width: 100%;
+  padding: 8px;
   -webkit-appearance: textfield;
   -moz-appearance: textfield;
 }
