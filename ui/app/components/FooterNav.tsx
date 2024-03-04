@@ -18,16 +18,17 @@ const FooterNav = () => {
           const isLogo = typeof p !== "string";
           const isCurPage = isLogo && !curPage ? true : curPage === p;
           return (
-            <Link
-              key={i}
-              href={isLogo ? "/" : p}
-              className={isCurPage ? "animate-pulse" : ""}
-            >
-              {!isLogo ? (
-                <span className={isCurPage ? "text-error" : ""}>_</span>
-              ) : null}
-              {p}
-            </Link>
+            <div key={i}>
+              <Link
+                href={isLogo ? "/" : p}
+                className={isCurPage ? "animate-pulse transition-all" : ""}
+              >
+                {!isLogo ? (
+                  <span className={isCurPage ? "text-error" : ""}>_</span>
+                ) : null}
+                {p}
+              </Link>
+            </div>
           );
         })}
       </div>
