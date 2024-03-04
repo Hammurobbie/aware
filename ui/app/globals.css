@@ -50,5 +50,6 @@ input[name^="category_id"]::-webkit-calendar-picker-indicator {
 }
 
 input[type="date"] {
+  -webkit-appearance: none;
   appearance: none;
 }
