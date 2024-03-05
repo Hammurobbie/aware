@@ -85,6 +85,8 @@ const ActivityInput = (data: any) => {
     return localDate.toISOString().slice(0, -1);
   }
 
+  // TODO: pull up list of unfinished activities to edit/add stop time to
+
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full flex justify-end items-center mb-4">
