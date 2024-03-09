@@ -30,6 +30,21 @@ const config: Config = {
       dropShadow: {
         harsh: "1px 1px 0 var(--dark)",
       },
+      keyframes: {
+        "bounce-right": {
+          "0%, 100%": {
+            transform: "translateX(-5%)",
+            "animation-timing-function": "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "50%": {
+            transform: "translateX(10%)",
+            "animation-timing-function": "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
+      },
+      animation: {
+        "bounce-right": "bounce-right 2s linear infinite",
+      },
     },
   },
   plugins: [],

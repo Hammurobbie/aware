@@ -1,11 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toggle from "./Toggle";
 import ActivityForm from "./ActivityForm";
 import cx from "classnames";
 
 const Dashboard = ({ categories, activities }: any) => {
-  const [actToggle, setActToggle] = useState(false);
+  const [actToggle, setActToggle] = useState<boolean>(false);
+  const [confirmTarget, setConfirmTarget] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    setConfirmTarget(undefined);
+  }, [actToggle, setConfirmTarget]);
 
   const handleActToggle = () => setActToggle(!actToggle);
 
@@ -40,10 +47,16 @@ const Dashboard = ({ categories, activities }: any) => {
               key={i}
               targetActivity={act}
               categories={categories}
+              confirmTarget={confirmTarget}
+              setConfirmTarget={setConfirmTarget}
             />
           ))
       ) : (
-        <ActivityForm categories={categories} />
+        <ActivityForm
+          categories={categories}
+          confirmTarget={confirmTarget}
+          setConfirmTarget={setConfirmTarget}
+        />
       )}
     </div>
   );

@@ -1,11 +1,16 @@
 "use client";
-import { FormEvent, SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import axios from "axios";
 import cx from "classnames";
 import { refresh_activities } from "../actions";
 import { refresh_categories } from "../actions";
 
-const ActivityForm = ({ targetActivity, categories }: any) => {
+const ActivityForm = ({
+  targetActivity,
+  categories,
+  confirmTarget,
+  setConfirmTarget,
+}: any) => {
   const initActivity = targetActivity
     ? {
         ...targetActivity,
@@ -22,9 +27,59 @@ const ActivityForm = ({ targetActivity, categories }: any) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [isDelete, setIsDelete] = useState<boolean>(false);
-  const [confirmTarget, setConfirmTarget] = useState<string | undefined>(
-    undefined
-  );
+
+  useEffect(() => {
+    function draggable(swipeContainer: any) {
+      const swipeBox = swipeContainer?.firstElementChild;
+      ["mousedown", "touchstart"].forEach((event) => {
+        swipeBox.addEventListener(event, (e: any) => {
+          const offsetX = e.clientX - parseInt(getComputedStyle(swipeBox).left);
+          const buttonLeftPos = swipeContainer?.getBoundingClientRect()?.left;
+          const buttonRightPos = swipeContainer?.getBoundingClientRect()?.right;
+          const swipeBoxLeftPos = swipeBox?.getBoundingClientRect()?.left;
+
+          function mouseMoveHandler(e: any) {
+            if (e.clientX >= buttonRightPos) {
+              removeEventListener("mousemove", mouseMoveHandler);
+              removeEventListener("mouseup", reset);
+              setConfirmTarget(undefined);
+              handleSubmitActivity();
+            } else if (
+              e.clientX > buttonLeftPos &&
+              swipeBoxLeftPos >= buttonLeftPos &&
+              e.clientX < buttonRightPos
+            ) {
+              swipeBox.style.left = e.clientX - offsetX + "px";
+            } else {
+              swipeBox.style.left = 0;
+            }
+          }
+
+          function reset() {
+            removeEventListener("mousemove", mouseMoveHandler);
+            removeEventListener("mouseup", reset);
+            // removeEventListener("touchmove", mouseMoveHandler);
+            // removeEventListener("touchend", reset);
+            swipeBox.style.left = 0;
+          }
+
+          addEventListener("mousemove", mouseMoveHandler);
+          addEventListener("mouseup", reset);
+          // addEventListener("touchmove", mouseMoveHandler);
+          // addEventListener("touchend", reset);
+        });
+      });
+    }
+
+    const swipeContainer = document?.getElementById(
+      `swipe-box-${activity?.id}`
+    );
+    if (
+      swipeContainer &&
+      (!activity?.id || activity?.id === Number(confirmTarget?.split("-")?.[2]))
+    )
+      draggable(swipeContainer);
+  }, [confirmTarget]);
 
   const triggerConfirm = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
@@ -37,8 +92,6 @@ const ActivityForm = ({ targetActivity, categories }: any) => {
       setErrors(newErrors);
     } else {
       setConfirmTarget(e?.nativeEvent?.submitter?.id);
-
-      // handleSubmitActivity(e);
     }
   };
 
@@ -69,8 +122,10 @@ const ActivityForm = ({ targetActivity, categories }: any) => {
       };
     }
 
-    const apiCall = targetActivity
-      ? axios.put(url, bodyData, config)
+    const apiCall = isDelete
+      ? axios.delete(`${url}/${bodyData?.id}`, config)
+      : targetActivity
+      ? axios.put(`${url}/${bodyData?.id}`, bodyData, config)
       : axios.post(url, bodyData, config);
 
     apiCall
@@ -78,9 +133,15 @@ const ActivityForm = ({ targetActivity, categories }: any) => {
         if (response.status === 200) {
           setActivity(initActivity);
           setSuccess(true);
-          refresh_categories();
-          refresh_activities();
+          if (!targetActivity) {
+            refresh_categories();
+            refresh_activities();
+          }
           setTimeout(() => {
+            if (targetActivity) {
+              refresh_categories();
+              refresh_activities();
+            }
             setSuccess(false);
           }, 5000);
         } else {
@@ -105,6 +166,25 @@ const ActivityForm = ({ targetActivity, categories }: any) => {
     localDate.setMilliseconds(0);
     return localDate.toISOString().slice(0, -1);
   }
+
+  const swipeBox = (isDelete?: boolean) => {
+    const bg = isDelete ? "bg-error" : "bg-success";
+    return (
+      <div
+        id={`swipe-box-${activity?.id}`}
+        className="absolute w-full h-full top-0 left-px"
+      >
+        <div
+          className={cx(
+            "absolute w-9 h-[95%] mt-px flex justify-center items-center rounded-sm",
+            bg
+          )}
+        >
+          <div className="animate-bounce-right text-light">{">>"}</div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div
@@ -197,17 +277,31 @@ const ActivityForm = ({ targetActivity, categories }: any) => {
             <button
               id={`delete-button-${targetActivity?.id || ""}`}
               onClick={() => setIsDelete(true)}
-              className="button p-2 mt-5 bg-light"
+              className={cx(
+                "relative button p-2 mt-5 bg-light",
+                confirmTarget === `delete-button-${targetActivity?.id || ""}`
+                  ? "!shadow-[var(--error)_0_0_7px_7px]"
+                  : ""
+              )}
             >
               Delete activity
+              {confirmTarget === `delete-button-${targetActivity?.id || ""}` &&
+                swipeBox(true)}
             </button>
           )}
           <button
             id={`submit-button-${targetActivity?.id || ""}`}
             onClick={() => isDelete && setIsDelete(false)}
-            className="button p-2 mt-5 mb-2 bg-light"
+            className={cx(
+              "relative button p-2 mt-5 mb-2 bg-light",
+              confirmTarget === `submit-button-${targetActivity?.id || ""}`
+                ? "!shadow-[var(--success)_0_0_7px_7px]"
+                : ""
+            )}
           >
             {`${targetActivity ? "Edit" : "Add"} activity`}
+            {confirmTarget === `submit-button-${targetActivity?.id || ""}` &&
+              swipeBox()}
           </button>
         </form>
       </div>
