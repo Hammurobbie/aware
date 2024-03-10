@@ -37,7 +37,7 @@ const FormButton = ({
             bg
           )}
         >
-          <div className="animate-bounce-right text-light">{">>"}</div>
+          <p className="mt-px animate-bounce-right text-light">{">>"}</p>
         </div>
       </div>
     );

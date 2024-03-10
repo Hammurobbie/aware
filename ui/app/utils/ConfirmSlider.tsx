@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 
-const ConfirmSlider = ({
-  confirmTarget,
-  setConfirmTarget,
-  activityId,
-}: any) => {
+const ConfirmSlider = ({ confirmTarget, setConfirmTarget, targetId }: any) => {
   useEffect(() => {
     function draggable(swipeContainer: any) {
       const swipeBox = swipeContainer?.firstElementChild;
@@ -56,14 +52,13 @@ const ConfirmSlider = ({
       });
     }
 
-    const swipeContainer = document?.getElementById(`swipe-box-${activityId}`);
+    const swipeContainer = document?.getElementById(`swipe-box-${targetId}`);
     if (
       swipeContainer &&
-      (!activityId ||
-        activityId === Number(confirmTarget?.target?.split("-")?.[2]))
+      (!targetId || targetId === Number(confirmTarget?.target?.split("-")?.[2]))
     )
       draggable(swipeContainer);
-  }, [confirmTarget, setConfirmTarget, activityId]);
+  }, [confirmTarget, setConfirmTarget, targetId]);
 };
 
 export default ConfirmSlider;

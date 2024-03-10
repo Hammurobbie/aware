@@ -1,14 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
+import cx from "classnames";
 import Toggle from "./Toggle";
 import ActivityForm from "./ActivityForm";
+import CheckinForm from "./CheckinForm";
+import LocalDate from "../utils/LocalDate";
 
-const Dashboard = ({ categories, activities }: any) => {
+const Dashboard = ({ categories, activities, checkins }: any) => {
   const [actToggle, setActToggle] = useState<boolean>(false);
   const [confirmTarget, setConfirmTarget] = useState({
     target: "",
     isConfirmed: false,
   });
+  const unfinishedActs = activities?.filter((act: any) => !act?.stop);
 
   useEffect(() => {
     setConfirmTarget({ target: "", isConfirmed: false });
@@ -16,7 +20,16 @@ const Dashboard = ({ categories, activities }: any) => {
 
   const handleActToggle = () => setActToggle(!actToggle);
 
-  // TODO: place daily check in below until evening, then pull to top
+  const now = new Date();
+  let night: string | Date = new Date();
+  night.setHours(21);
+  night.setMinutes(30);
+  night = LocalDate(night);
+  const formattedTimeNow = LocalDate(now);
+  const hasTodaysCheck = checkins?.some(
+    (c: any) => c.date?.split("T")?.[0] === formattedTimeNow?.split("T")?.[0]
+  );
+  const isEOD = Date.parse(formattedTimeNow) > Date.parse(night);
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -29,11 +42,14 @@ const Dashboard = ({ categories, activities }: any) => {
         </p>
         <Toggle isToggled={actToggle} toggleFunc={handleActToggle} />
       </div>
-      {actToggle ? (
-        activities?.filter((act: any) => !act?.stop).length ? (
-          activities
-            ?.filter((act: any) => !act?.stop)
-            .map((act: any, i: number) => (
+      <div
+        className={cx("w-full flex flex-col", {
+          "flex-col-reverse": !hasTodaysCheck && isEOD,
+        })}
+      >
+        {actToggle ? (
+          unfinishedActs.length ? (
+            unfinishedActs.map((act: any, i: number) => (
               <ActivityForm
                 key={i}
                 targetActivity={act}
@@ -43,18 +59,26 @@ const Dashboard = ({ categories, activities }: any) => {
                 setActToggle={setActToggle}
               />
             ))
+          ) : (
+            <p className="mt-44 text-dark text-center">
+              {"You don't have any unfinished business"}
+            </p>
+          )
         ) : (
-          <p className="mt-44 text-dark text-center">
-            {"You don't have any unfinished business"}
-          </p>
-        )
-      ) : (
-        <ActivityForm
-          categories={categories}
-          confirmTarget={confirmTarget}
-          setConfirmTarget={setConfirmTarget}
+          <ActivityForm
+            categories={categories}
+            confirmTarget={confirmTarget}
+            setConfirmTarget={setConfirmTarget}
+          />
+        )}
+        <span
+          className={cx("w-full mb-4 border-4 border-success", {
+            "mt-14": !actToggle,
+            "mt-10": actToggle,
+          })}
         />
-      )}
+        <CheckinForm />
+      </div>
     </div>
   );
 };

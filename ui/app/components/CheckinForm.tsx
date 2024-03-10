@@ -2,45 +2,42 @@
 import { FormEvent, SyntheticEvent, useState } from "react";
 import axios from "axios";
 import cx from "classnames";
-import { refresh_activities } from "../actions";
-import { refresh_categories } from "../actions";
+import { refresh_checkins } from "../actions";
 import FormButton from "./FormButton";
 import ConfirmSlider from "../utils/ConfirmSlider";
-import LocalDate from "../utils/LocalDate";
 
-const ActivityForm = ({
-  targetActivity,
-  categories,
+const CheckinForm = ({
+  targetCheckin,
+  emotions,
   confirmTarget,
   setConfirmTarget,
-  setActToggle,
 }: any) => {
-  const initActivity = targetActivity
+  const initCheckin = targetCheckin
     ? {
-        ...targetActivity,
-        stop: LocalDate(new Date()),
+        ...targetCheckin,
+        stop: toLocalISOString(new Date()),
       }
     : {
         name: "",
-        start: LocalDate(new Date()),
+        start: toLocalISOString(new Date()),
         stop: "",
         category: "",
         category_id: "",
       };
-  const [activity, setActivity] = useState(initActivity);
+  const [checkin, setCheckin] = useState(initCheckin);
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
 
-  ConfirmSlider({ confirmTarget, setConfirmTarget, targetId: activity?.id });
+  ConfirmSlider({ confirmTarget, setConfirmTarget, targetId: checkin?.id });
 
   const triggerConfirm = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     const newErrors = [];
-    if (!activity.name) newErrors.push("name");
-    if (!activity.category) newErrors.push("category");
-    if (targetActivity && !activity.start) newErrors.push("start");
-    if (targetActivity && !activity.stop) newErrors.push("stop");
+    if (!checkin.name) newErrors.push("name");
+    if (!checkin.category) newErrors.push("category");
+    if (targetCheckin && !checkin.start) newErrors.push("start");
+    if (targetCheckin && !checkin.stop) newErrors.push("stop");
     if (newErrors.length) {
       setErrors(newErrors);
     } else {
@@ -53,7 +50,7 @@ const ActivityForm = ({
 
   const handleSubmitActivity = (e: FormEvent) => {
     e.preventDefault();
-    const url = "http://127.0.0.1:8000/activities";
+    const url = "http://127.0.0.1:8000/wellbeing_checks";
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -64,27 +61,25 @@ const ActivityForm = ({
           "Content-Type, Authorization, X-Requested-With",
       },
     };
-    let bodyData = activity;
-    const tarCat = categories?.find(
-      (cat: any) => cat.name === activity.category
-    );
-    if (tarCat) {
+    let bodyData = checkin;
+    const tarEmo = emotions?.find((cat: any) => cat.name === checkin.category);
+    if (tarEmo) {
       bodyData = {
         ...bodyData,
-        category_id: tarCat.id,
+        category_id: tarEmo.id,
         category: "",
       };
     }
 
     const apiCall = submitter?.includes("delete")
       ? axios.delete(`${url}/${bodyData?.id}`, config)
-      : targetActivity
+      : targetCheckin
       ? axios.put(`${url}/${bodyData?.id}`, bodyData, config)
       : axios.post(url, bodyData, config);
 
     const handleError = (e: any) => {
       setErrors([e]);
-      setActivity(initActivity);
+      setCheckin(initCheckin);
       setConfirmTarget({ target: "", isConfirmed: false });
       setTimeout(() => {
         setErrors([]);
@@ -94,12 +89,10 @@ const ActivityForm = ({
     apiCall
       .then(function (response) {
         if (response.status === 200) {
-          setActivity(initActivity);
+          setCheckin(initCheckin);
           setSuccess(true);
           setConfirmTarget({ target: "", isConfirmed: false });
-          refresh_activities();
-          refresh_categories();
-          setActToggle && setActToggle(false);
+          refresh_checkins();
           setTimeout(() => {
             setSuccess(false);
           }, 5000);
@@ -113,11 +106,18 @@ const ActivityForm = ({
   const handleFormInput = (e: any) => {
     if (errors.includes(e.target.name))
       setErrors(errors.filter((err) => err !== e.target.name));
-    setActivity({
-      ...activity,
+    setCheckin({
+      ...checkin,
       [e.target.name]: e.target.value,
     });
   };
+
+  function toLocalISOString(date: any) {
+    const localDate = new Date(date - date.getTimezoneOffset() * 60000);
+    localDate.setSeconds(0);
+    localDate.setMilliseconds(0);
+    return localDate.toISOString().slice(0, -1);
+  }
 
   return (
     <div
@@ -125,7 +125,7 @@ const ActivityForm = ({
         "w-full text-center",
         !errors.length && !success ? "mt-8" : "",
         {
-          "mb-4": targetActivity,
+          "mb-4": targetCheckin,
         }
       )}
     >
@@ -137,7 +137,7 @@ const ActivityForm = ({
       {success ? <p className="text-success mb-2">Nice, got it</p> : null}
       <div className="p-5 bg-grayscale rounded-sm shadow-harsh">
         <h2 className="text-xl text-light">
-          {targetActivity ? "Finish what ya started" : "What're you doin'?"}
+          {targetCheckin ? "Change how you're doin" : "How're you doin'?"}
         </h2>
         <form
           onSubmit={
@@ -161,7 +161,7 @@ const ActivityForm = ({
             name="name"
             autoComplete="off"
             placeholder="snorting meth"
-            value={activity?.name}
+            value={checkin?.name}
           />
           <label className="mt-2 text-start text-bg-secondary" htmlFor="start">
             Start time
@@ -175,7 +175,7 @@ const ActivityForm = ({
               errors?.includes("start") && "ring ring-error"
             )}
             name="start"
-            value={activity?.start}
+            value={checkin?.start}
           />
           <label className="mt-2 text-start text-bg-secondary" htmlFor="stop">
             Stop time
@@ -189,7 +189,7 @@ const ActivityForm = ({
               errors?.includes("stop") && "ring ring-error"
             )}
             name="stop"
-            value={activity?.stop}
+            value={checkin?.stop}
           />
           <label
             className="mt-2 text-start text-bg-secondary"
@@ -205,29 +205,29 @@ const ActivityForm = ({
               errors?.includes("category") && "ring ring-error"
             )}
             name="category"
-            value={activity?.category}
+            value={checkin?.category}
             onChange={handleFormInput}
-            list={`category_select-${targetActivity?.id || ""}`}
+            list={`category_select-${targetCheckin?.id || ""}`}
             autoComplete="off"
           />
-          <datalist id={`category_select-${targetActivity?.id || ""}`}>
-            {categories?.map((cat: { name: string; id: number }) => (
+          <datalist id={`category_select-${targetCheckin?.id || ""}`}>
+            {emotions?.map((cat: { name: string; id: number }) => (
               <option key={cat?.id} value={cat?.name}>
                 {cat?.name}
               </option>
             ))}
           </datalist>
-          {targetActivity && (
+          {targetCheckin && (
             <FormButton
-              id={targetActivity?.id || activity?.id}
+              id={targetCheckin?.id || checkin?.id}
               type="delete"
               confirmTarget={confirmTarget}
               setSubmitter={setSubmitter}
             />
           )}
           <FormButton
-            id={targetActivity?.id || activity?.id}
-            type={targetActivity ? "edit" : "add"}
+            id={targetCheckin?.id || checkin?.id}
+            type={targetCheckin ? "edit" : "add"}
             confirmTarget={confirmTarget}
             setSubmitter={setSubmitter}
           />
@@ -237,4 +237,4 @@ const ActivityForm = ({
   );
 };
 
-export default ActivityForm;
+export default CheckinForm;
