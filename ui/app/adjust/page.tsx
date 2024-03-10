@@ -27,13 +27,13 @@ export default async function Adjust() {
               <p key={key} className="text-slate-400 pt-2">
                 {e.name}
               </p>
-            )) || (
-              <p className="mt-44 text-dark text-center">
-                coming soon to a phone near you
-              </p>
-            )}
+            ))}
           </div>
-        ))}
+        )) || (
+          <p className="mt-44 text-dark text-center">
+            coming soon to a phone near you
+          </p>
+        )}
       </div>
     </main>
   );
