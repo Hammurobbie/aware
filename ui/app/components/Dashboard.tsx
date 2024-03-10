@@ -39,7 +39,7 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
         </p>
         <Toggle isToggled={actToggle} toggleFunc={handleActToggle} />
       </div>
-      {/* vv - for some reason this fixes dumbass ios safari bug - vv*/}
+      {/* vv - for some reason this fixes horseshit ios safari date bug - vv*/}
       <div className="hidden">
         {formattedTimeNow}
         {night}
