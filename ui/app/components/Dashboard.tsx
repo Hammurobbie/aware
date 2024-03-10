@@ -4,13 +4,15 @@ import Toggle from "./Toggle";
 import ActivityForm from "./ActivityForm";
 
 const Dashboard = ({ categories, activities }: any) => {
-  const initConfirm = { target: "", isConfirmed: false };
   const [actToggle, setActToggle] = useState<boolean>(false);
-  const [confirmTarget, setConfirmTarget] = useState(initConfirm);
+  const [confirmTarget, setConfirmTarget] = useState({
+    target: "",
+    isConfirmed: false,
+  });
 
   useEffect(() => {
-    setConfirmTarget(initConfirm);
-  }, [initConfirm, actToggle, setConfirmTarget]);
+    setConfirmTarget({ target: "", isConfirmed: false });
+  }, [actToggle, setConfirmTarget]);
 
   const handleActToggle = () => setActToggle(!actToggle);
 
