@@ -198,6 +198,7 @@ const ActivityForm = ({
             Category
           </label>
           <input
+            id="category"
             type="text"
             placeholder="select or add new"
             className={cx(

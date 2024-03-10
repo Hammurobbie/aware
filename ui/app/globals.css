@@ -40,10 +40,10 @@ body {
 input,
 select,
 button {
-  @apply focus:!outline-success;
+  @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-success;
 }
 
-input[name^="category_id"]::-webkit-calendar-picker-indicator {
+input[name^="category"]::-webkit-calendar-picker-indicator {
   opacity: 100;
   margin-bottom: 7px;
   cursor: pointer;
