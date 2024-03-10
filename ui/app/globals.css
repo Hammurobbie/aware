@@ -40,7 +40,7 @@ body {
 input,
 select,
 button {
-  @apply focus:outline-success;
+  @apply focus:!outline-success;
 }
 
 input[name^="category_id"]::-webkit-calendar-picker-indicator {

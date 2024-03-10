@@ -26,10 +26,10 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
   night.setMinutes(30);
   night = LocalDate(night);
   const formattedTimeNow = LocalDate(now);
+  const isEOD = Date.parse(formattedTimeNow) > Date.parse(night);
   const hasTodaysCheck = checkins?.some(
     (c: any) => c.date?.split("T")?.[0] === formattedTimeNow?.split("T")?.[0]
   );
-  const isEOD = Date.parse(formattedTimeNow) > Date.parse(night);
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -48,7 +48,7 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
         })}
       >
         {actToggle ? (
-          unfinishedActs.length ? (
+          unfinishedActs?.length ? (
             unfinishedActs.map((act: any, i: number) => (
               <ActivityForm
                 key={i}

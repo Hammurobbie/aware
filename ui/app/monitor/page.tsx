@@ -2,7 +2,10 @@ import Image from "next/image";
 
 async function getData() {
   const res = await fetch("http://127.0.0.1:8000/wellbeing_checks").catch(
-    (err) => console.log(err)
+    (err) => {
+      return null;
+      console.log(err);
+    }
   );
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.

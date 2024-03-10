@@ -4,15 +4,24 @@ import Dashboard from "./components/Dashboard";
 async function getData() {
   const actCats = await fetch("http://127.0.0.1:8000/activity_categories", {
     next: { tags: ["activity_categories"] },
-  }).catch((err) => console.log(err));
+  }).catch((err) => {
+    return null;
+    console.log(err);
+  });
 
   const acts = await fetch("http://127.0.0.1:8000/activities", {
     next: { tags: ["activities"] },
-  }).catch((err) => console.log(err));
+  }).catch((err) => {
+    return null;
+    console.log(err);
+  });
 
   const checks = await fetch("http://127.0.0.1:8000/wellbeing_checks", {
     next: { tags: ["wellbeing_checks"] },
-  }).catch((err) => console.log(err));
+  }).catch((err) => {
+    return null;
+    console.log(err);
+  });
 
   const results = await Promise.all([actCats, acts, checks]);
   return results;
