@@ -47,9 +47,9 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
         {!hasTodaysCheck && "no check"}
         {isEOD && "eod"}
         <br />
-        {Date.parse(night)}
+        {Date.parse(night)} {night}
         <br />
-        {Date.parse(formattedTimeNow)}
+        {Date.parse(formattedTimeNow)} {formattedTimeNow}
         <br />
         {actToggle ? (
           unfinishedActs?.length ? (
