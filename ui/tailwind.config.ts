@@ -41,9 +41,19 @@ const config: Config = {
             "animation-timing-function": "cubic-bezier(0, 0, 0.2, 1)",
           },
         },
+        glow: {
+          "0%, 100%": {
+            "box-shadow": "0 0 5px -5px var(--text)",
+          },
+          "50%": {
+            "box-shadow": "0 0 5px 5px var(--text);",
+          },
+        },
       },
       animation: {
         "bounce-right": "bounce-right 2s linear infinite",
+        glow: "glow 3s linear infinite",
+        pulse: "pulse 5s linear infinite",
       },
     },
   },

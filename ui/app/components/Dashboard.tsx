@@ -5,19 +5,16 @@ import ActivityForm from "./ActivityForm";
 import cx from "classnames";
 
 const Dashboard = ({ categories, activities }: any) => {
+  const initConfirm = { target: "", isConfirmed: false };
   const [actToggle, setActToggle] = useState<boolean>(false);
-  const [confirmTarget, setConfirmTarget] = useState<string | undefined>(
-    undefined
-  );
+  const [confirmTarget, setConfirmTarget] = useState(initConfirm);
 
   useEffect(() => {
-    setConfirmTarget(undefined);
+    setConfirmTarget(initConfirm);
   }, [actToggle, setConfirmTarget]);
 
   const handleActToggle = () => setActToggle(!actToggle);
 
-  // TODO: pull up list of unfinished activities to edit/add stop time to
-  // ^^ tap then swipe to delete/submit updates to avoid modal
   // TODO: place daily check in below until evening, then pull to top
 
   return (
@@ -49,6 +46,7 @@ const Dashboard = ({ categories, activities }: any) => {
               categories={categories}
               confirmTarget={confirmTarget}
               setConfirmTarget={setConfirmTarget}
+              setActToggle={setActToggle}
             />
           ))
       ) : (
