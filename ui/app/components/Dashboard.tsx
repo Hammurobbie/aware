@@ -21,10 +21,9 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
   const handleActToggle = () => setActToggle(!actToggle);
 
   const now = new Date();
-  let night: string | Date = new Date();
-  night.setHours(21);
-  night.setMinutes(30);
-  night = LocalDate(night);
+  const timestamp = new Date().setHours(21, 30, 0, 0);
+  let night = LocalDate(new Date(timestamp));
+
   const formattedTimeNow = LocalDate(now);
   const isEOD = Date.parse(formattedTimeNow) > Date.parse(night);
   const hasTodaysCheck = checkins?.some(
