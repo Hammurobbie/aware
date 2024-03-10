@@ -10,7 +10,7 @@ const Dashboard = ({ categories, activities }: any) => {
 
   useEffect(() => {
     setConfirmTarget(initConfirm);
-  }, [actToggle, setConfirmTarget]);
+  }, [initConfirm, actToggle, setConfirmTarget]);
 
   const handleActToggle = () => setActToggle(!actToggle);
 
@@ -43,7 +43,7 @@ const Dashboard = ({ categories, activities }: any) => {
             ))
         ) : (
           <p className="mt-44 text-dark text-center">
-            You don't have any unfinished business
+            {"You don't have any unfinished business"}
           </p>
         )
       ) : (
