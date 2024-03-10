@@ -21,9 +21,9 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
   const handleActToggle = () => setActToggle(!actToggle);
 
   const nightTimestamp = new Date().setHours(21, 30, 0, 0);
-  const night = Date.parse(new Date(nightTimestamp).toISOString());
-  const formattedTimeNow = new Date().toISOString();
-  const isEOD = night < Date.parse(formattedTimeNow);
+  const night = LocalDate(new Date(nightTimestamp));
+  const formattedTimeNow = LocalDate(new Date());
+  const isEOD = Date.parse(night) < Date.parse(formattedTimeNow);
   const hasTodaysCheck = checkins?.some(
     (c: any) => c?.date?.split("T")?.[0] === formattedTimeNow?.split("T")?.[0]
   );
@@ -38,6 +38,11 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
           {actToggle ? "unfinished activities" : "new activity"}
         </p>
         <Toggle isToggled={actToggle} toggleFunc={handleActToggle} />
+      </div>
+      {/* vv - for some reason this fixes dumbass ios safari bug - vv*/}
+      <div className="hidden">
+        {formattedTimeNow}
+        {night}
       </div>
       <div
         className={cx("w-full flex flex-col", {
