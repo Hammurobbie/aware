@@ -48,7 +48,7 @@ const FormButton = ({
       id={buttonId}
       onClick={() => setSubmitter(buttonId)}
       className={cx(
-        "relative button p-2 mt-5 mb-2",
+        "relative button p-2 mt-2 mb-2",
         isConfirming ? `${shadow} active:transform-none` : "",
         confirmTarget?.target === buttonId && confirmTarget?.isConfirmed
           ? `bg-${accentColor} text-light animate-glow`

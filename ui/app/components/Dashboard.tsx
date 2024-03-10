@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Toggle from "./Toggle";
 import ActivityForm from "./ActivityForm";
-import cx from "classnames";
 
 const Dashboard = ({ categories, activities }: any) => {
   const initConfirm = { target: "", isConfirmed: false };
@@ -20,15 +19,7 @@ const Dashboard = ({ categories, activities }: any) => {
   return (
     <div className="w-full flex flex-col items-center">
       <h1 className="text-4xl font-bold mt-4 mb-8 drop-shadow-harsh text-center text-balance">
-        How fucked is your head{" "}
-        <span
-          className={cx(
-            "transform-all",
-            actToggle ? "text-success" : "text-error"
-          )}
-        >
-          :)
-        </span>
+        Track
       </h1>
       <div className="w-full flex justify-end items-center mb-4">
         <p className="mr-4">
@@ -37,18 +28,24 @@ const Dashboard = ({ categories, activities }: any) => {
         <Toggle isToggled={actToggle} toggleFunc={handleActToggle} />
       </div>
       {actToggle ? (
-        activities
-          ?.filter((act: any) => !act?.stop)
-          .map((act: any, i: number) => (
-            <ActivityForm
-              key={i}
-              targetActivity={act}
-              categories={categories}
-              confirmTarget={confirmTarget}
-              setConfirmTarget={setConfirmTarget}
-              setActToggle={setActToggle}
-            />
-          ))
+        activities?.filter((act: any) => !act?.stop).length ? (
+          activities
+            ?.filter((act: any) => !act?.stop)
+            .map((act: any, i: number) => (
+              <ActivityForm
+                key={i}
+                targetActivity={act}
+                categories={categories}
+                confirmTarget={confirmTarget}
+                setConfirmTarget={setConfirmTarget}
+                setActToggle={setActToggle}
+              />
+            ))
+        ) : (
+          <p className="mt-44 text-dark text-center">
+            You don't have any unfinished business
+          </p>
+        )
       ) : (
         <ActivityForm
           categories={categories}

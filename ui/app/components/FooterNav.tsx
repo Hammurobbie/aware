@@ -9,7 +9,7 @@ const FooterNav = () => {
   const pages = [
     "monitor",
     <Image key="logo_key" priority alt="logo" src={logo} width={100} />,
-    "settings",
+    "adjust",
   ];
   return (
     <header className="sticky bottom-0 z-10 flex justify-center items-center w-full h-16 bg-bg-secondary text-grayscale border-t-4 border-error shadow-[var(--error)_0_0_10px_0]">

@@ -27,7 +27,7 @@ const ActivityForm = ({
         category_id: "",
       };
   const [activity, setActivity] = useState(initActivity);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
 
@@ -64,7 +64,7 @@ const ActivityForm = ({
       },
     };
     let bodyData = activity;
-    const tarCat = categories.find(
+    const tarCat = categories?.find(
       (cat: any) => cat.name === activity.category
     );
     if (tarCat) {
@@ -81,6 +81,15 @@ const ActivityForm = ({
       ? axios.put(`${url}/${bodyData?.id}`, bodyData, config)
       : axios.post(url, bodyData, config);
 
+    const handleError = (e: any) => {
+      setErrors([e]);
+      setActivity(initActivity);
+      setConfirmTarget({ target: "", isConfirmed: false });
+      setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+    };
+
     apiCall
       .then(function (response) {
         if (response.status === 200) {
@@ -94,10 +103,10 @@ const ActivityForm = ({
             setSuccess(false);
           }, 5000);
         } else {
-          throw new Error("Could not reach the API: " + response);
+          handleError(response);
         }
       })
-      .catch((e) => console.log(e));
+      .catch((e) => handleError(e));
   };
 
   const handleFormInput = (e: any) => {
@@ -127,11 +136,15 @@ const ActivityForm = ({
       )}
     >
       {errors.length ? (
-        <p className="text-error mb-2">Maybe finish the form first</p>
+        <p className="text-error mb-2">
+          {errors?.[0]?.message || "Maybe finish the form first"}
+        </p>
       ) : null}
       {success ? <p className="text-success mb-2">Nice, got it</p> : null}
       <div className="p-5 bg-grayscale rounded-sm shadow-harsh">
-        <h2 className="text-xl text-light">{"What're you doin'?"}</h2>
+        <h2 className="text-xl text-light">
+          {targetActivity ? "Finish what ya started" : "What're you doin'?"}
+        </h2>
         <form
           onSubmit={
             confirmTarget?.isConfirmed && confirmTarget?.target === submitter
@@ -194,7 +207,7 @@ const ActivityForm = ({
             type="text"
             placeholder="select or add new"
             className={cx(
-              "mb-px mt-1 bg-light p-2 h-10",
+              "mb-4 mt-1 bg-light p-2 h-10",
               errors?.includes("category") && "ring ring-error"
             )}
             name="category"
