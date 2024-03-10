@@ -40,7 +40,10 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
         <Toggle isToggled={actToggle} toggleFunc={handleActToggle} />
       </div>
       {/* vv - for some reason this fixes dumbass ios safari bug - vv*/}
-      <div className="hidden">{formattedTimeNow}</div>
+      <div className="hidden">
+        {formattedTimeNow}
+        {night}
+      </div>
       <div
         className={cx("w-full flex flex-col", {
           "flex-col-reverse": !hasTodaysCheck && isEOD,
