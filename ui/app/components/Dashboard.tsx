@@ -44,6 +44,13 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
           "flex-col-reverse": !hasTodaysCheck && isEOD,
         })}
       >
+        {!hasTodaysCheck && "no check"}
+        {isEOD && "eod"}
+        <br />
+        {Date.parse(night)}
+        <br />
+        {Date.parse(formattedTimeNow)}
+        <br />
         {actToggle ? (
           unfinishedActs?.length ? (
             unfinishedActs.map((act: any, i: number) => (
