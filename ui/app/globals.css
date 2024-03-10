@@ -47,8 +47,6 @@ input[name^="category"]::-webkit-calendar-picker-indicator {
   opacity: 100;
   margin-bottom: 7px;
   cursor: pointer;
-  accent-color: var(--grayscale) !important;
-  color: var(--grayscale) !important;
 }
 
 input[type="datetime-local"] {

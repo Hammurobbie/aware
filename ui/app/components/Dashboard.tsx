@@ -27,7 +27,7 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
   const formattedTimeNow = LocalDate(now);
   const isEOD = Date.parse(formattedTimeNow) > Date.parse(night);
   const hasTodaysCheck = checkins?.some(
-    (c: any) => c.date?.split("T")?.[0] === formattedTimeNow?.split("T")?.[0]
+    (c: any) => c?.date?.split("T")?.[0] === formattedTimeNow?.split("T")?.[0]
   );
 
   return (
