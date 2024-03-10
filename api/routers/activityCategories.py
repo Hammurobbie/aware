@@ -19,10 +19,6 @@ async def add_activity_category(category: ActivityCategory):
 async def read_activity_categories():
     with Session(engine) as session:
         results = session.exec(select(ActivityCategory)).all()
-        if not results:
-            raise HTTPException(
-                status_code=404, detail="No activity categories table/array found"
-            )
         return results
 
 

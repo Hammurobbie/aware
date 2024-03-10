@@ -21,8 +21,6 @@ async def add_emotion(emotion: Emotion):
 async def read_emotions():
     with Session(engine) as session:
         results = session.exec(select(Emotion)).all()
-        if not results:
-            raise HTTPException(status_code=404, detail="No emotion table/array found")
         return results
 
 

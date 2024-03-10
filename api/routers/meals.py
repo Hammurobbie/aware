@@ -21,8 +21,6 @@ async def add_meal(meal: Meal):
 async def read_meals():
     with Session(engine) as session:
         results = session.exec(select(Meal)).all()
-        if not results:
-            raise HTTPException(status_code=404, detail="No meal table/array found")
         return results
 
 

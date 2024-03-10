@@ -37,8 +37,6 @@ async def read_activities():
         for act, act_cat in results:
             act.category = None if not act_cat else act_cat.name
             result.append(act)
-        if not results:
-            raise HTTPException(status_code=404, detail="No activity table/array found")
         return result
 
 

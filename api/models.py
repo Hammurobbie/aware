@@ -38,7 +38,6 @@ class MealCheckLink(SQLModel, table=True):
 class Emotion(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: Optional[str] = None
-    sentiment: str
 
     wellbeing_checks: List["WellbeingCheck"] = Relationship(
         back_populates="emotions", link_model=EmotionCheckLink
