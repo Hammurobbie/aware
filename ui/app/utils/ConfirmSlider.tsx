@@ -55,7 +55,7 @@ const ConfirmSlider = ({ confirmTarget, setConfirmTarget, targetId }: any) => {
     const swipeContainer = document?.getElementById(`swipe-box-${targetId}`);
     if (
       swipeContainer &&
-      (!targetId || targetId === Number(confirmTarget?.target?.split("-")?.[2]))
+      (!targetId || String(targetId) === confirmTarget?.target?.split("-")?.[2])
     )
       draggable(swipeContainer);
   }, [confirmTarget, setConfirmTarget, targetId]);

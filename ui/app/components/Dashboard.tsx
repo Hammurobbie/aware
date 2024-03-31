@@ -6,14 +6,13 @@ import ActivityForm from "./ActivityForm";
 import CheckinForm from "./CheckinForm";
 import LocalDate from "../utils/LocalDate";
 
-const Dashboard = ({ categories, activities, checkins }: any) => {
+const Dashboard = ({ categories, activities, checkins, emotions }: any) => {
   const [actToggle, setActToggle] = useState<boolean>(false);
   const [confirmTarget, setConfirmTarget] = useState({
     target: "",
     isConfirmed: false,
   });
   const unfinishedActs = activities?.filter((act: any) => !act?.stop);
-
   useEffect(() => {
     setConfirmTarget({ target: "", isConfirmed: false });
   }, [actToggle, setConfirmTarget]);
@@ -79,7 +78,12 @@ const Dashboard = ({ categories, activities, checkins }: any) => {
             "mt-10": actToggle,
           })}
         />
-        <CheckinForm />
+        <CheckinForm
+          emotions={emotions}
+          checkins={checkins}
+          confirmTarget={confirmTarget}
+          setConfirmTarget={setConfirmTarget}
+        />
       </div>
     </div>
   );

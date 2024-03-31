@@ -9,35 +9,36 @@ import ConfirmSlider from "../utils/ConfirmSlider";
 const CheckinForm = ({
   targetCheckin,
   emotions,
+  checkins,
   confirmTarget,
   setConfirmTarget,
 }: any) => {
   const initCheckin = targetCheckin
-    ? {
-        ...targetCheckin,
-        stop: toLocalISOString(new Date()),
-      }
+    ? targetCheckin
     : {
-        name: "",
-        start: toLocalISOString(new Date()),
-        stop: "",
-        category: "",
-        category_id: "",
+        date: toDateInputValue(new Date()),
+        notes: "",
+        is_intermittent_fasting: false,
+        updated_emotions: "",
+        updated_meals: "",
       };
   const [checkin, setCheckin] = useState(initCheckin);
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
 
-  ConfirmSlider({ confirmTarget, setConfirmTarget, targetId: checkin?.id });
+  ConfirmSlider({
+    confirmTarget,
+    setConfirmTarget,
+    targetId: `wb_${checkin?.id}`,
+  });
 
   const triggerConfirm = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     const newErrors = [];
-    if (!checkin.name) newErrors.push("name");
-    if (!checkin.category) newErrors.push("category");
-    if (targetCheckin && !checkin.start) newErrors.push("start");
-    if (targetCheckin && !checkin.stop) newErrors.push("stop");
+    if (!checkin.date) newErrors.push("date");
+    if (!checkin.notes) newErrors.push("notes");
+    if (!checkin.updated_emotions) newErrors.push("updated_emotions");
     if (newErrors.length) {
       setErrors(newErrors);
     } else {
@@ -62,12 +63,26 @@ const CheckinForm = ({
       },
     };
     let bodyData = checkin;
-    const tarEmo = emotions?.find((cat: any) => cat.name === checkin.category);
+    const dupDay = checkins?.find((wbc: any) => wbc.date === checkin.date);
+    if (dupDay) {
+      setErrors([{ message: "A checkin for this date already exists" }]);
+      return;
+    }
+    const tarEmo = emotions?.find(
+      (emo: any) => emo.name === checkin.updated_emotions
+    );
+    // TODO: This and the emotion field is kinda horse shit and needs to be updated to handle multiple emotions
     if (tarEmo) {
       bodyData = {
         ...bodyData,
-        category_id: tarEmo.id,
-        category: "",
+        updated_emotions: `[${JSON.stringify(tarEmo)}]`,
+      };
+    } else {
+      bodyData = {
+        ...bodyData,
+        updated_emotions: `[${JSON.stringify({
+          name: bodyData?.updated_emotions,
+        })}]`,
       };
     }
 
@@ -104,19 +119,28 @@ const CheckinForm = ({
   };
 
   const handleFormInput = (e: any) => {
-    if (errors.includes(e.target.name))
+    if (errors.includes(e.target.name)) {
       setErrors(errors.filter((err) => err !== e.target.name));
+    } else if (
+      errors.some(
+        (e) => e?.message === "A checkin for this date already exists"
+      )
+    )
+      setErrors(
+        errors.filter(
+          (err) => err?.message !== "A checkin for this date already exists"
+        )
+      );
     setCheckin({
       ...checkin,
       [e.target.name]: e.target.value,
     });
   };
 
-  function toLocalISOString(date: any) {
-    const localDate = new Date(date - date.getTimezoneOffset() * 60000);
-    localDate.setSeconds(0);
-    localDate.setMilliseconds(0);
-    return localDate.toISOString().slice(0, -1);
+  function toDateInputValue(dateObject: Date) {
+    const local = new Date(dateObject);
+    local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+    return local.toJSON().slice(0, 10);
   }
 
   return (
@@ -147,73 +171,57 @@ const CheckinForm = ({
           }
           className="flex flex-col"
         >
-          <label className="mt-2 text-start text-bg-secondary" htmlFor="name">
-            Activity name
+          <label className="mt-2 text-start text-bg-secondary" htmlFor="date">
+            Date
           </label>
           <input
-            id="name"
+            id="date"
             onChange={handleFormInput}
-            type="text"
+            type="date"
             className={cx(
               "mb-px mt-1 bg-light p-2",
-              errors?.includes("name") && "ring ring-error"
+              errors?.includes("date") && "ring ring-error"
             )}
-            name="name"
-            autoComplete="off"
-            placeholder="snorting meth"
-            value={checkin?.name}
+            name="date"
+            value={checkin?.date}
           />
-          <label className="mt-2 text-start text-bg-secondary" htmlFor="start">
-            Start time
+          <label className="mt-2 text-start text-bg-secondary" htmlFor="notes">
+            Notes
           </label>
-          <input
-            id="start"
+          <textarea
+            id="notes"
             onChange={handleFormInput}
-            type="datetime-local"
             className={cx(
-              "mb-px mt-1 bg-light p-2 cursor-pointer",
-              errors?.includes("start") && "ring ring-error"
+              "mb-px mt-1 min-h-16 bg-light p-2 cursor-pointer",
+              errors?.includes("notes") && "ring ring-error"
             )}
-            name="start"
-            value={checkin?.start}
-          />
-          <label className="mt-2 text-start text-bg-secondary" htmlFor="stop">
-            Stop time
-          </label>
-          <input
-            id="stop"
-            onChange={handleFormInput}
-            type="datetime-local"
-            className={cx(
-              "mb-px mt-1 bg-light p-2 cursor-pointer",
-              errors?.includes("stop") && "ring ring-error"
-            )}
-            name="stop"
-            value={checkin?.stop}
+            name="notes"
+            placeholder="I've never felt a negative emotion in my life"
+            value={checkin?.notes}
           />
           <label
             className="mt-2 text-start text-bg-secondary"
-            htmlFor="category"
+            htmlFor="updated_emotions"
           >
-            Category
+            Primary emotion
           </label>
           <input
             type="text"
             placeholder="select or add new"
             className={cx(
               "mb-4 mt-1 bg-light p-2 h-10",
-              errors?.includes("category") && "ring ring-error"
+              errors?.includes("updated_emotions") && "ring ring-error"
             )}
-            name="category"
-            value={checkin?.category}
+            name="updated_emotions"
+            value={checkin?.updated_emotions}
             onChange={handleFormInput}
-            list={`category_select-${targetCheckin?.id || ""}`}
+            list={`updated_emotions_select-${targetCheckin?.id || ""}`}
             autoComplete="off"
           />
-          <datalist id={`category_select-${targetCheckin?.id || ""}`}>
-            {emotions?.map((cat: { name: string; id: number }) => (
-              <option key={cat?.id} value={cat?.name}>
-                {cat?.name}
+          <datalist id={`updated_emotions_select-${targetCheckin?.id || ""}`}>
+            {emotions?.map((emo: { name: string; id: number }) => (
+              <option key={emo?.id} value={emo?.name}>
+                {emo?.name}
               </option>
             ))}
           </datalist>
@@ -221,6 +229,7 @@ const CheckinForm = ({
             <FormButton
               id={targetCheckin?.id || checkin?.id}
               type="delete"
+              action="check in"
               confirmTarget={confirmTarget}
               setSubmitter={setSubmitter}
             />
@@ -228,6 +237,7 @@ const CheckinForm = ({
           <FormButton
             id={targetCheckin?.id || checkin?.id}
             type={targetCheckin ? "edit" : "add"}
+            action="check in"
             confirmTarget={confirmTarget}
             setSubmitter={setSubmitter}
           />

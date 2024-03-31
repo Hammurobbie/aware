@@ -3,20 +3,24 @@ import cx from "classnames";
 
 interface FormButtonProps {
   id?: number;
+  action?: string;
   type: string;
   confirmTarget: any;
   setSubmitter: (id: string) => void;
 }
 
 const FormButton = ({
+  id,
+  action,
   type,
   confirmTarget,
   setSubmitter,
-  id,
 }: FormButtonProps) => {
   const isDelete = type === "delete";
   const isEdit = type === "edit";
-  const buttonId = `${isDelete ? "delete" : "submit"}-button-${id || ""}`;
+  const buttonId = `${action ? action.replace(" ", "-") + "-" : ""}${
+    isDelete ? "delete" : "submit"
+  }-button-${id || ""}`;
   const isConfirming =
     confirmTarget?.target === buttonId && !confirmTarget?.isConfirmed;
   const accentColor = isDelete ? "error" : "success";
@@ -57,7 +61,9 @@ const FormButton = ({
     >
       {isConfirming
         ? " You sure?"
-        : `${isEdit ? "Edit" : isDelete ? "Delete" : "Add"} activity`}
+        : `${isEdit ? "Edit" : isDelete ? "Delete" : "Add"} ${
+            action || "activity"
+          }`}
       {isConfirming && swipeBox()}
     </button>
   );
