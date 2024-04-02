@@ -1,14 +1,7 @@
-export default function Running({
-  size,
-  className,
-}: {
-  size: number;
-  className?: string;
-}) {
+export default function Running({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height={size}
       viewBox="0 0 512.149 512.149"
       className={className}
     >

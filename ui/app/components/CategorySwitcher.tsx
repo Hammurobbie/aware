@@ -10,13 +10,13 @@ import Running from "../icons/running";
 export default function CategorySwitcher(props: any) {
   const [selectedItem, setSelectedItem] = useState("activities");
   const [selectedPosition, setSelectedPosition] = useState<string | undefined>(
-    "calc(50% - 24px)"
+    "calc(50% - 23.5px)"
   );
 
   const handleCategoryChange = (menuItem: string) => {
     setSelectedItem(menuItem);
     const itemEl = document?.getElementById(menuItem);
-    setSelectedPosition(`calc(${itemEl?.offsetLeft}px - 9.5px)`);
+    setSelectedPosition(`calc(${itemEl?.offsetLeft}px - 8.5px)`);
   };
 
   return (
@@ -46,20 +46,18 @@ export default function CategorySwitcher(props: any) {
         />
         <button id="checkins" onClick={() => handleCategoryChange("checkins")}>
           <Meditating
-            className={cx("adjust-icon duration-500", {
+            className={cx("adjust-icon duration-500 h-8 mb-px", {
               "fill-bg": selectedItem === "checkins",
               "fill-grayscale": selectedItem !== "checkins",
             })}
-            size={30}
           />
         </button>
         <button id="emotions" onClick={() => handleCategoryChange("emotions")}>
           <Emotions
-            className={cx("adjust-icon duration-500", {
+            className={cx("adjust-icon duration-500 h-8", {
               "fill-bg": selectedItem === "emotions",
               "fill-grayscale": selectedItem !== "emotions",
             })}
-            size={30}
           />
         </button>
         <button
@@ -67,20 +65,18 @@ export default function CategorySwitcher(props: any) {
           onClick={() => handleCategoryChange("activities")}
         >
           <Running
-            className={cx("adjust-icon duration-500", {
+            className={cx("adjust-icon duration-500 h-8", {
               "fill-bg": selectedItem === "activities",
               "fill-grayscale": selectedItem !== "activities",
             })}
-            size={30}
           />
         </button>
         <button id="meals" onClick={() => handleCategoryChange("meals")}>
           <Meals
-            className={cx("adjust-icon duration-500", {
+            className={cx("adjust-icon duration-500 h-8", {
               "fill-bg": selectedItem === "meals",
               "fill-grayscale": selectedItem !== "meals",
             })}
-            size={30}
           />
         </button>
         <button
@@ -88,11 +84,10 @@ export default function CategorySwitcher(props: any) {
           onClick={() => handleCategoryChange("categories")}
         >
           <Categories
-            className={cx("adjust-icon duration-500", {
+            className={cx("adjust-icon duration-500 h-8", {
               "fill-bg": selectedItem === "categories",
               "fill-grayscale": selectedItem !== "categories",
             })}
-            size={30}
           />
         </button>
       </div>

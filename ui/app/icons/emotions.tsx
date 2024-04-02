@@ -1,14 +1,7 @@
-export default function Emotions({
-  size,
-  className,
-}: {
-  size: number;
-  className?: string;
-}) {
+export default function Emotions({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height={size}
       viewBox="0 0 512 512"
       className={className}
     >

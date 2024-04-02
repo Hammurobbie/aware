@@ -1,14 +1,7 @@
-export default function Meditating({
-  size,
-  className,
-}: {
-  size: number;
-  className?: string;
-}) {
+export default function Meditating({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height={size}
       viewBox="-351 153 256 256"
       className={className}
     >

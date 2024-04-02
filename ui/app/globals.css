@@ -58,7 +58,3 @@ input[type="date"] {
 .adjust-icon {
   filter: url("#pixelate");
 }
-
-svg {
-  display: block;
-}

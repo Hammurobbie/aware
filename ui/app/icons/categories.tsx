@@ -1,14 +1,7 @@
-export default function Categories({
-  size,
-  className,
-}: {
-  size: number;
-  className?: string;
-}) {
+export default function Categories({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height={size}
       viewBox="0 0 48 48"
       className={className}
     >

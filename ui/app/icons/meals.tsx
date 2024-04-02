@@ -1,14 +1,7 @@
-export default function Meals({
-  size,
-  className,
-}: {
-  size: number;
-  className?: string;
-}) {
+export default function Meals({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      height={size}
       viewBox="0 -3.84 122.88 122.88"
       className={className}
     >
