@@ -1,40 +1,8 @@
 import Dashboard from "./components/Dashboard";
-
-async function getData() {
-  const actCats = await fetch("http://127.0.0.1:8000/activity_categories", {
-    next: { tags: ["activity_categories"] },
-  }).catch((err) => {
-    return null;
-    console.log(err);
-  });
-
-  const acts = await fetch("http://127.0.0.1:8000/activities", {
-    next: { tags: ["activities"] },
-  }).catch((err) => {
-    return null;
-    console.log(err);
-  });
-
-  const checks = await fetch("http://127.0.0.1:8000/wellbeing_checks", {
-    next: { tags: ["wellbeing_checks"] },
-  }).catch((err) => {
-    return null;
-    console.log(err);
-  });
-
-  const emotions = await fetch("http://127.0.0.1:8000/emotions", {
-    next: { tags: ["emotions"] },
-  }).catch((err) => {
-    return null;
-    console.log(err);
-  });
-
-  const results = await Promise.all([actCats, acts, checks, emotions]);
-  return results;
-}
+import fetchData from "./utils/FetchData";
 
 export default async function Home() {
-  const data = await getData();
+  const data = await fetchData();
   const categories = await data?.[0]?.json();
   const activities = await data?.[1]?.json();
   const checkins = await data?.[2]?.json();

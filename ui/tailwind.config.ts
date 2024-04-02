@@ -49,10 +49,19 @@ const config: Config = {
             "box-shadow": "0 0 5px 5px var(--text);",
           },
         },
+        "glow-red": {
+          "0%, 100%": {
+            "box-shadow": "0 0 10px -4px var(--error)",
+          },
+          "50%": {
+            "box-shadow": "0 0 10px 4px var(--error);",
+          },
+        },
       },
       animation: {
         "bounce-right": "bounce-right 2s linear infinite",
         glow: "glow 3s linear infinite",
+        "glow-red": "glow-red 5s linear infinite",
         pulse: "pulse 5s linear infinite",
       },
     },
