@@ -19,32 +19,37 @@ export default function CategorySwitcher(props: any) {
     setSelectedPosition(`calc(${itemEl?.offsetLeft}px - 8.5px)`);
   };
 
+  console.log(selectedItem, props[selectedItem]);
+
   return (
     <>
-      {/* pixelation overlay filter */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        version="1.1"
-        width="0"
-        height="0"
-      >
-        <defs>
-          <filter id="pixelate" x="0" y="0">
-            <feFlood x="2" y="2" height="1" width="1" />
-            <feComposite width="2" height="2" />
-            <feTile result="a" />
-            <feComposite in="SourceGraphic" in2="a" operator="in" />
-            <feMorphology operator="dilate" radius=".4" />
-          </filter>
-        </defs>
+      {/* pixelation overlay filter / most break in safari */}
+      <svg height={0} width={0} xmlns="http://www.w3.org/2000/svg">
+        <filter id="pixelate">
+          <feGaussianBlur
+            stdDeviation="0.1"
+            in="SourceGraphic"
+            result="smoothed"
+          />
+          <feComposite operator="in" in2="SourceGraphic" />
+          {/* <feFlood x="2" y="2" height="1" width="1" />
+          <feComposite width="2" height="2" />
+          <feTile result="a" />
+          <feComposite in="SourceGraphic" in2="a" operator="in" />
+          <feMorphology operator="dilate" radius=".4" /> */}
+        </filter>
       </svg>
 
-      <div className="flex justify-around w-full relative transition-all">
+      <div className="relative flex justify-around w-full transition-all">
         <div
-          className="absolute top-0 bottom-0 my-auto bg-error h-12 w-12 rounded-full animate-glow-red blur-[1px] duration-500"
+          className="absolute z-0 top-0 bottom-0 my-auto bg-error h-12 w-12 rounded-full animate-glow-red blur-[1px] duration-500"
           style={{ left: selectedPosition }}
         />
-        <button id="checkins" onClick={() => handleCategoryChange("checkins")}>
+        <button
+          className="z-10"
+          id="checkins"
+          onClick={() => handleCategoryChange("checkins")}
+        >
           <Meditating
             className={cx("adjust-icon duration-500 h-8 mb-px", {
               "fill-bg": selectedItem === "checkins",
@@ -52,7 +57,11 @@ export default function CategorySwitcher(props: any) {
             })}
           />
         </button>
-        <button id="emotions" onClick={() => handleCategoryChange("emotions")}>
+        <button
+          className="z-10"
+          id="emotions"
+          onClick={() => handleCategoryChange("emotions")}
+        >
           <Emotions
             className={cx("adjust-icon duration-500 h-8", {
               "fill-bg": selectedItem === "emotions",
@@ -61,6 +70,7 @@ export default function CategorySwitcher(props: any) {
           />
         </button>
         <button
+          className="z-10"
           id="activities"
           onClick={() => handleCategoryChange("activities")}
         >
@@ -71,7 +81,11 @@ export default function CategorySwitcher(props: any) {
             })}
           />
         </button>
-        <button id="meals" onClick={() => handleCategoryChange("meals")}>
+        <button
+          className="z-10"
+          id="meals"
+          onClick={() => handleCategoryChange("meals")}
+        >
           <Meals
             className={cx("adjust-icon duration-500 h-8", {
               "fill-bg": selectedItem === "meals",
@@ -80,6 +94,7 @@ export default function CategorySwitcher(props: any) {
           />
         </button>
         <button
+          className="z-10"
           id="categories"
           onClick={() => handleCategoryChange("categories")}
         >
