@@ -1,4 +1,3 @@
-import { JSXElementConstructor } from "react";
 import ActivityForm from "../components/ActivityForm";
 import CheckinForm from "../components/CheckinForm";
 
@@ -27,7 +26,7 @@ export default function UpdateFormMapper({
           Form = CheckinForm;
           break;
         default:
-          Form = function () {
+          Form = function dick() {
             return <div className="bg-dark h-5 w-full my-1" />;
           };
       }

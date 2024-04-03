@@ -13,7 +13,7 @@ export default function CategorySwitcher(props: any) {
     isConfirmed: false,
   });
 
-  // console.log(selectedItem, props[selectedItem]);
+  console.log(selectedItem, props[selectedItem]);
 
   return (
     <>
