@@ -30,15 +30,17 @@ const CheckinForm = ({
   ConfirmSlider({
     confirmTarget,
     setConfirmTarget,
-    targetId: `wb_${checkin?.id}`,
+    targetId: `wb_${checkin?.id || "wb"}`,
   });
 
   const triggerConfirm = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
+    const isDelete = e?.nativeEvent?.submitter?.id?.includes("delete");
     const newErrors = [];
-    if (!checkin.date) newErrors.push("date");
-    if (!checkin.notes) newErrors.push("notes");
-    if (!checkin.updated_emotions) newErrors.push("updated_emotions");
+    if (!checkin.date && !isDelete) newErrors.push("date");
+    if (!checkin.notes && !isDelete) newErrors.push("notes");
+    if (!checkin.updated_emotions && !isDelete)
+      newErrors.push("updated_emotions");
     if (newErrors.length) {
       setErrors(newErrors);
     } else {
@@ -213,7 +215,7 @@ const CheckinForm = ({
               errors?.includes("updated_emotions") && "ring ring-error"
             )}
             name="updated_emotions"
-            value={checkin?.updated_emotions}
+            value={checkin?.updated_emotions?.[0]?.name}
             onChange={handleFormInput}
             list={`updated_emotions_select-${targetCheckin?.id || ""}`}
             autoComplete="off"
@@ -227,7 +229,7 @@ const CheckinForm = ({
           </datalist>
           {targetCheckin && (
             <FormButton
-              id={targetCheckin?.id || checkin?.id}
+              id={targetCheckin?.id || "wb"}
               type="delete"
               action="check in"
               confirmTarget={confirmTarget}
@@ -235,7 +237,7 @@ const CheckinForm = ({
             />
           )}
           <FormButton
-            id={targetCheckin?.id || checkin?.id}
+            id={targetCheckin?.id || "wb"}
             type={targetCheckin ? "edit" : "add"}
             action="check in"
             confirmTarget={confirmTarget}

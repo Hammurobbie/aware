@@ -17,8 +17,8 @@ export default async function Adjust() {
       <CategorySwitcher
         activities={activities}
         categories={categories}
-        meals={meals}
         checkins={checkins}
+        meals={meals}
         emotions={emotions}
       />
     </main>

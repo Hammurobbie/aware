@@ -83,7 +83,7 @@ async def update_wellbeing_check(id: int, wellbeing_check: WellbeingCheck):
         return "wellbeing check successfully updated"
 
 
-@router.delete("/wellbeing_check/{id}")
+@router.delete("/wellbeing_checks/{id}")
 async def delete_wellbeing_check(id: int):
     with Session(engine) as session:
         wellbeing_check = session.get(WellbeingCheck, id)

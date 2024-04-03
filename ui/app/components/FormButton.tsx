@@ -18,9 +18,9 @@ const FormButton = ({
 }: FormButtonProps) => {
   const isDelete = type === "delete";
   const isEdit = type === "edit";
-  const buttonId = `${action ? action.replace(" ", "-") + "-" : ""}${
-    isDelete ? "delete" : "submit"
-  }-button-${id || ""}`;
+  const buttonId = `${
+    action ? action.replace(" ", "_") + "_" : ""
+  }${type}-button-${id}`;
   const isConfirming =
     confirmTarget?.target === buttonId && !confirmTarget?.isConfirmed;
   const accentColor = isDelete ? "error" : "success";

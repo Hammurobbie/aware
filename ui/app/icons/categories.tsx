@@ -1,6 +1,6 @@
 export default function Categories({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" className={className}>
+    <svg viewBox="0 0 49 49" className={className}>
       <g>
         <g>
           <rect width="48" height="48" fill="none" />

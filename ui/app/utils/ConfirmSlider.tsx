@@ -21,7 +21,6 @@ const ConfirmSlider = ({ confirmTarget, setConfirmTarget, targetId }: any) => {
 
           function mouseMoveHandler(e: any) {
             const xPos = e?.touches?.[0]?.clientX || e.clientX;
-            // console.log(buttonLeftPos, " d ", xPos);
             if (xPos >= buttonRightPos) {
               removeEventListener(start, mouseMoveHandler);
               removeEventListener(end, reset);
@@ -51,12 +50,9 @@ const ConfirmSlider = ({ confirmTarget, setConfirmTarget, targetId }: any) => {
         });
       });
     }
-
-    const swipeContainer = document?.getElementById(`swipe-box-${targetId}`);
-    if (
-      swipeContainer &&
-      (!targetId || String(targetId) === confirmTarget?.target?.split("-")?.[2])
-    )
+    const id = targetId?.split("_")?.[1];
+    const swipeContainer = document?.getElementById(`swipe-box-${id}`);
+    if (swipeContainer && id === confirmTarget?.target?.split("-")?.[2])
       draggable(swipeContainer);
   }, [confirmTarget, setConfirmTarget, targetId]);
 };

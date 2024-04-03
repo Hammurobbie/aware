@@ -32,15 +32,20 @@ const ActivityForm = ({
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
 
-  ConfirmSlider({ confirmTarget, setConfirmTarget, targetId: activity?.id });
+  ConfirmSlider({
+    confirmTarget,
+    setConfirmTarget,
+    targetId: `ac_${activity?.id || "ac"}`,
+  });
 
   const triggerConfirm = (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
+    const isDelete = e?.nativeEvent?.submitter?.id?.includes("delete");
     const newErrors = [];
-    if (!activity.name) newErrors.push("name");
-    if (!activity.category) newErrors.push("category");
-    if (targetActivity && !activity.start) newErrors.push("start");
-    if (targetActivity && !activity.stop) newErrors.push("stop");
+    if (!activity.name && !isDelete) newErrors.push("name");
+    if (!activity.category && !isDelete) newErrors.push("category");
+    if (targetActivity && !activity.start && !isDelete) newErrors.push("start");
+    if (targetActivity && !activity.stop && !isDelete) newErrors.push("stop");
     if (newErrors.length) {
       setErrors(newErrors);
     } else {
@@ -220,14 +225,14 @@ const ActivityForm = ({
           </datalist>
           {targetActivity && (
             <FormButton
-              id={targetActivity?.id || activity?.id}
+              id={targetActivity?.id || "ac"}
               type="delete"
               confirmTarget={confirmTarget}
               setSubmitter={setSubmitter}
             />
           )}
           <FormButton
-            id={targetActivity?.id || activity?.id}
+            id={targetActivity?.id || "ac"}
             type={targetActivity ? "edit" : "add"}
             confirmTarget={confirmTarget}
             setSubmitter={setSubmitter}
