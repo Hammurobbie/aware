@@ -39,18 +39,8 @@ export default function CategorySwitcher(props: any) {
           className="absolute z-0 top-0 bottom-0 my-auto bg-error h-12 w-12 rounded-full animate-glow-red blur-[1px] duration-500"
           style={{ left: selectedPosition }}
         />
-        {Object.keys(props)?.map((v, i) => (
-          <IconButton
-            key={i}
-            type={v}
-            setSelectedItem={setSelectedItem}
-            setSelectedPosition={setSelectedPosition}
-            isSelected={selectedItem === v}
-          />
-        )) ||
-          // TODO: delete - for no data debugg
-          ["activities", "categories", "checkins", "meals", "emotions"]?.map(
-            (v, i) => (
+        {props
+          ? Object.keys(props)?.map((v, i) => (
               <IconButton
                 key={i}
                 type={v}
@@ -58,8 +48,19 @@ export default function CategorySwitcher(props: any) {
                 setSelectedPosition={setSelectedPosition}
                 isSelected={selectedItem === v}
               />
-            )
-          )}
+            ))
+          : // TODO: delete - for no data debugg
+            ["activities", "categories", "checkins", "meals", "emotions"]?.map(
+              (v, i) => (
+                <IconButton
+                  key={i}
+                  type={v}
+                  setSelectedItem={setSelectedItem}
+                  setSelectedPosition={setSelectedPosition}
+                  isSelected={selectedItem === v}
+                />
+              )
+            )}
       </div>
       <div className="max-w-5xl w-full flex justify-center flex-wrap">
         <UpdateFormMapper
