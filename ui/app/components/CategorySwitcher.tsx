@@ -13,7 +13,7 @@ export default function CategorySwitcher(props: any) {
     isConfirmed: false,
   });
 
-  console.log(selectedItem, props[selectedItem]);
+  // console.log(selectedItem, props[selectedItem], Object.keys(props));
 
   return (
     <>
@@ -47,7 +47,19 @@ export default function CategorySwitcher(props: any) {
             setSelectedPosition={setSelectedPosition}
             isSelected={selectedItem === v}
           />
-        ))}
+        )) ||
+          // TODO: delete - for no data debugg
+          ["activities", "categories", "checkins", "meals", "emotions"]?.map(
+            (v, i) => (
+              <IconButton
+                key={i}
+                type={v}
+                setSelectedItem={setSelectedItem}
+                setSelectedPosition={setSelectedPosition}
+                isSelected={selectedItem === v}
+              />
+            )
+          )}
       </div>
       <div className="max-w-5xl w-full flex justify-center flex-wrap">
         <UpdateFormMapper
