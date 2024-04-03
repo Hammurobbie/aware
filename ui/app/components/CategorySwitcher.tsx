@@ -13,11 +13,11 @@ export default function CategorySwitcher(props: any) {
     isConfirmed: false,
   });
 
-  // console.log(selectedItem, props[selectedItem], Object.keys(props));
+  console.log(selectedItem, props[selectedItem], Object.keys(props));
 
   return (
     <>
-      {/* pixelation overlay filter / most break in safari */}
+      {/* pixelation overlay filter / other filters break in safari */}
       <svg height={0} width={0} xmlns="http://www.w3.org/2000/svg">
         <filter id="pixelate">
           <feGaussianBlur
@@ -26,11 +26,6 @@ export default function CategorySwitcher(props: any) {
             result="smoothed"
           />
           <feComposite operator="in" in2="SourceGraphic" />
-          {/* <feFlood x="2" y="2" height="1" width="1" />
-          <feComposite width="2" height="2" />
-          <feTile result="a" />
-          <feComposite in="SourceGraphic" in2="a" operator="in" />
-          <feMorphology operator="dilate" radius=".4" /> */}
         </filter>
       </svg>
 
@@ -39,7 +34,7 @@ export default function CategorySwitcher(props: any) {
           className="absolute z-0 top-0 bottom-0 my-auto bg-error h-12 w-12 rounded-full animate-glow-red blur-[1px] duration-500"
           style={{ left: selectedPosition }}
         />
-        {props
+        {props?.[selectedItem]
           ? Object.keys(props)?.map((v, i) => (
               <IconButton
                 key={i}
