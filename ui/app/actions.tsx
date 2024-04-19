@@ -13,3 +13,11 @@ export async function refresh_activities() {
 export async function refresh_checkins() {
   revalidateTag("wellbeing_checks");
 }
+
+export async function refresh_meals() {
+  revalidateTag("meals");
+}
+
+export async function refresh_emotions() {
+  revalidateTag("emotions");
+}

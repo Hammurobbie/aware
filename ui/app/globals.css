@@ -54,7 +54,3 @@ input[type="date"] {
   appearance: none;
   min-height: 42px;
 }
-
-.adjust-icon {
-  filter: url("#pixelate");
-}

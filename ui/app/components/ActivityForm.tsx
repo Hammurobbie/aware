@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, SyntheticEvent, useState } from "react";
+import { FormEvent, SyntheticEvent, useState, useEffect } from "react";
 import axios from "axios";
 import cx from "classnames";
 import { refresh_activities } from "../actions";
@@ -31,6 +31,13 @@ const ActivityForm = ({
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
+
+  useEffect(() => {
+    setActivity({
+      ...targetActivity,
+      stop: LocalDate(new Date()),
+    });
+  }, [targetActivity, LocalDate, setActivity]);
 
   ConfirmSlider({
     confirmTarget,

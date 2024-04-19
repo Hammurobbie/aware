@@ -58,7 +58,7 @@ async def read_wellbeing_check(id: int):
 async def update_wellbeing_check(id: int, wellbeing_check: WellbeingCheck):
     with Session(engine) as session:
         selected_wellbeing_check = session.get(WellbeingCheck, id)
-        if not wellbeing_check:
+        if not selected_wellbeing_check:
             raise HTTPException(status_code=404, detail="wellbeing check not found")
         if wellbeing_check.date:
             selected_wellbeing_check.date = wellbeing_check.date
@@ -70,7 +70,6 @@ async def update_wellbeing_check(id: int, wellbeing_check: WellbeingCheck):
         )
 
         session.commit()
-        session.refresh(selected_wellbeing_check)
         session.refresh(selected_wellbeing_check)
 
         if wellbeing_check.updated_emotions:

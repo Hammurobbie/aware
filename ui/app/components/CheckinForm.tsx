@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, SyntheticEvent, useState } from "react";
+import { FormEvent, SyntheticEvent, useState, useEffect } from "react";
 import axios from "axios";
 import cx from "classnames";
 import { refresh_checkins } from "../actions";
@@ -26,6 +26,10 @@ const CheckinForm = ({
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
+
+  useEffect(() => {
+    setCheckin(targetCheckin);
+  }, [targetCheckin, setCheckin]);
 
   ConfirmSlider({
     confirmTarget,
@@ -82,9 +86,7 @@ const CheckinForm = ({
     } else {
       bodyData = {
         ...bodyData,
-        updated_emotions: `[${JSON.stringify({
-          name: bodyData?.updated_emotions,
-        })}]`,
+        updated_emotions: JSON.stringify(bodyData?.updated_emotions),
       };
     }
 

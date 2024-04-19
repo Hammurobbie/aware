@@ -1,5 +1,6 @@
 import ActivityForm from "../components/ActivityForm";
 import CheckinForm from "../components/CheckinForm";
+import GenericForm from "../components/GenericForm";
 
 export default function UpdateFormMapper({
   data,
@@ -15,6 +16,7 @@ export default function UpdateFormMapper({
       {"There ain't none to update"}
     </p>
   );
+
   return (
     data?.map((formData: any, i: number) => {
       let Form: any;
@@ -26,15 +28,15 @@ export default function UpdateFormMapper({
           Form = CheckinForm;
           break;
         default:
-          Form = function dick() {
-            return <div className="bg-dark h-5 w-full my-1" />;
-          };
+          Form = GenericForm;
       }
       return (
         <Form
           key={i}
+          type={type}
           targetActivity={formData}
           targetCheckin={formData}
+          targetData={formData}
           emotions={emotions}
           categories={categories}
           confirmTarget={confirmTarget}

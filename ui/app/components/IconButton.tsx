@@ -34,7 +34,7 @@ export default function IconButton({
       onClick={() => handleCategoryChange(type)}
     >
       <Icon
-        className={cx("adjust-icon duration-500 h-8", {
+        className={cx("duration-500 h-8", {
           "fill-bg": isSelected,
           "fill-grayscale": !isSelected,
         })}

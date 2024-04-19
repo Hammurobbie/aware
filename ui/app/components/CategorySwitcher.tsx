@@ -13,22 +13,8 @@ export default function CategorySwitcher(props: any) {
     isConfirmed: false,
   });
 
-  console.log(selectedItem, props[selectedItem], Object.keys(props));
-
   return (
     <>
-      {/* pixelation overlay filter / other filters break in safari */}
-      <svg height={0} width={0} xmlns="http://www.w3.org/2000/svg">
-        <filter id="pixelate">
-          <feGaussianBlur
-            stdDeviation="0.1"
-            in="SourceGraphic"
-            result="smoothed"
-          />
-          <feComposite operator="in" in2="SourceGraphic" />
-        </filter>
-      </svg>
-
       <div className="relative flex justify-around w-full transition-all mb-4">
         <div
           className="absolute z-0 top-0 bottom-0 my-auto bg-error h-12 w-12 rounded-full animate-glow-red blur-[1px] duration-500"

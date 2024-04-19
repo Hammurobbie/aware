@@ -32,6 +32,8 @@ async def update_meal(id: int, meal: Meal):
             raise HTTPException(status_code=404, detail="Meal not found")
         if meal.name:
             selected_meal.name = meal.name
+        if meal.description:
+            selected_meal.description = meal.description
         session.commit()
         session.refresh(selected_meal)
         return "meal successfully updated"
@@ -40,9 +42,7 @@ async def update_meal(id: int, meal: Meal):
 @router.delete("/meals/{id}")
 async def delete_meal(id: int):
     with Session(engine) as session:
-        meal = session.exec(
-            select(Meal).where(Meal.name == "a bigger fucking stick of butter")
-        ).first()
+        meal = session.get(Meal, id)
         if not meal:
             raise HTTPException(status_code=404, detail="Meal not found")
         session.delete(meal)
