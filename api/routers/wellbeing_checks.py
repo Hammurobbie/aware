@@ -104,6 +104,9 @@ async def update_linked_table(
         update_list = []
         new_fields = eval(fields_list)
         is_meal = model.__name__ == "Meal"
+        print()
+        print(new_fields)
+        print(" ")
         for field in new_fields:
             new_field = model(
                 name=field["name"],

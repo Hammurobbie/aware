@@ -6,7 +6,13 @@ import ActivityForm from "./ActivityForm";
 import CheckinForm from "./CheckinForm";
 import LocalDate from "../utils/LocalDate";
 
-const Dashboard = ({ categories, activities, checkins, emotions }: any) => {
+const Dashboard = ({
+  categories,
+  activities,
+  checkins,
+  emotions,
+  meals,
+}: any) => {
   const [actToggle, setActToggle] = useState<boolean>(false);
   const [confirmTarget, setConfirmTarget] = useState({
     target: "",
@@ -80,6 +86,7 @@ const Dashboard = ({ categories, activities, checkins, emotions }: any) => {
         />
         <CheckinForm
           emotions={emotions}
+          meals={meals}
           checkins={checkins}
           confirmTarget={confirmTarget}
           setConfirmTarget={setConfirmTarget}

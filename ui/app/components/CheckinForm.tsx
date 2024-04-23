@@ -9,6 +9,7 @@ import ConfirmSlider from "../utils/ConfirmSlider";
 const CheckinForm = ({
   targetCheckin,
   emotions,
+  meals,
   checkins,
   confirmTarget,
   setConfirmTarget,
@@ -26,9 +27,11 @@ const CheckinForm = ({
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
+  const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
+  const mealsId = `meals-select-${Math.random()}`;
 
   useEffect(() => {
-    setCheckin(targetCheckin);
+    if (targetCheckin) setCheckin(targetCheckin);
   }, [targetCheckin, setCheckin]);
 
   ConfirmSlider({
@@ -86,7 +89,9 @@ const CheckinForm = ({
     } else {
       bodyData = {
         ...bodyData,
-        updated_emotions: JSON.stringify(bodyData?.updated_emotions),
+        updated_emotions: `[${JSON.stringify({
+          name: bodyData?.updated_emotions,
+        })}]`,
       };
     }
 
@@ -129,12 +134,23 @@ const CheckinForm = ({
       errors.some(
         (e) => e?.message === "A checkin for this date already exists"
       )
-    )
+    ) {
       setErrors(
         errors.filter(
           (err) => err?.message !== "A checkin for this date already exists"
         )
       );
+    } else if (e.target.name === "meals") {
+      const mealSelect = document?.getElementById(mealsId) as HTMLSelectElement;
+      const updatedMeals = selectedMeals;
+      const tarMeal = selectedMeals.indexOf(e.target.value);
+      if (tarMeal > -1) {
+        updatedMeals.splice(tarMeal, 1);
+      } else updatedMeals.push(e.target.value);
+      setSelectedMeals(updatedMeals);
+      if (mealSelect) mealSelect.value = "select";
+      console.log(selectedMeals);
+    }
     setCheckin({
       ...checkin,
       [e.target.name]: e.target.value,
@@ -196,7 +212,7 @@ const CheckinForm = ({
             id="notes"
             onChange={handleFormInput}
             className={cx(
-              "mb-px mt-1 min-h-16 bg-light p-2 cursor-pointer",
+              "mb-px mt-1 min-h-16 bg-light p-2",
               errors?.includes("notes") && "ring ring-error"
             )}
             name="notes"
@@ -213,7 +229,7 @@ const CheckinForm = ({
             type="text"
             placeholder="select or add new"
             className={cx(
-              "mb-4 mt-1 bg-light p-2 h-10",
+              "mb-px mt-1 bg-light p-2",
               errors?.includes("updated_emotions") && "ring ring-error"
             )}
             name="updated_emotions"
@@ -229,6 +245,35 @@ const CheckinForm = ({
               </option>
             ))}
           </datalist>
+          <label
+            className="mt-2 text-start text-bg-secondary"
+            htmlFor="updated_emotions"
+          >
+            Meals
+          </label>
+          <div
+            className={cx(
+              "mb-4 mt-1",
+              errors?.includes("meals") && "ring ring-error"
+            )}
+          >
+            <select
+              id={mealsId}
+              name="meals"
+              onChange={handleFormInput}
+              defaultValue="select"
+              className="w-full bg-light p-2 h-10 border-r-8 border-transparent"
+            >
+              <option disabled value="select">
+                Select
+              </option>
+              {meals?.map((meal: { name: string; id: number }) => (
+                <option key={meal?.id} value={meal?.name}>
+                  {meal?.name}
+                </option>
+              ))}
+            </select>
+          </div>
           {targetCheckin && (
             <FormButton
               id={targetCheckin?.id || "wb"}

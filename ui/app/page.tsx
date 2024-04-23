@@ -7,6 +7,7 @@ export default async function Home() {
   const activities = await data?.[1]?.json();
   const checkins = await data?.[2]?.json();
   const emotions = await data?.[3]?.json();
+  const meals = await data?.[4]?.json();
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 max-w-2xl mx-auto">
@@ -16,6 +17,7 @@ export default async function Home() {
           activities={activities}
           checkins={checkins}
           emotions={emotions}
+          meals={meals}
         />
       </div>
     </main>

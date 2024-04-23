@@ -38,6 +38,7 @@ export default function UpdateFormMapper({
           targetCheckin={formData}
           targetData={formData}
           emotions={emotions}
+          meals={meals}
           categories={categories}
           confirmTarget={confirmTarget}
           setConfirmTarget={setConfirmTarget}

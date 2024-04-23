@@ -33,10 +33,11 @@ const ActivityForm = ({
   const [submitter, setSubmitter] = useState("");
 
   useEffect(() => {
-    setActivity({
-      ...targetActivity,
-      stop: LocalDate(new Date()),
-    });
+    if (targetActivity)
+      setActivity({
+        ...targetActivity,
+        stop: LocalDate(new Date()),
+      });
   }, [targetActivity, LocalDate, setActivity]);
 
   ConfirmSlider({
@@ -86,7 +87,7 @@ const ActivityForm = ({
         category_id: tarCat.id,
         category: "",
       };
-    }
+    } else bodyData.category_id = "";
 
     const apiCall = submitter?.includes("delete")
       ? axios.delete(`${url}/${bodyData?.id}`, config)
@@ -218,7 +219,7 @@ const ActivityForm = ({
               errors?.includes("category") && "ring ring-error"
             )}
             name="category"
-            value={activity?.category}
+            value={activity?.category ?? ""}
             onChange={handleFormInput}
             list={`category_select-${targetActivity?.id || ""}`}
             autoComplete="off"
