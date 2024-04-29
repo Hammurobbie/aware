@@ -39,8 +39,9 @@ body {
 
 input,
 select,
-button {
-  @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-success;
+button,
+textarea {
+  @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-success rounded-none;
 }
 
 input[name^="category"]::-webkit-calendar-picker-indicator {
