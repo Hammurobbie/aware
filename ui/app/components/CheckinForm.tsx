@@ -20,14 +20,13 @@ const CheckinForm = ({
         date: toDateInputValue(new Date()),
         notes: "",
         is_intermittent_fasting: false,
-        updated_emotions: "",
-        updated_meals: "",
+        updated_emotions: null,
+        updated_meals: [],
       };
   const [checkin, setCheckin] = useState(initCheckin);
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
-  const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const mealsId = `meals-select-${Math.random()}`;
 
   useEffect(() => {
@@ -48,6 +47,8 @@ const CheckinForm = ({
     if (!checkin.notes && !isDelete) newErrors.push("notes");
     if (!checkin.updated_emotions && !isDelete)
       newErrors.push("updated_emotions");
+    if (!checkin.updated_meals.length && !isDelete)
+      newErrors.push("updated_meals");
     if (newErrors.length) {
       setErrors(newErrors);
     } else {
@@ -71,29 +72,26 @@ const CheckinForm = ({
           "Content-Type, Authorization, X-Requested-With",
       },
     };
-    let bodyData = checkin;
+    let bodyData = { ...checkin };
     const dupDay = checkins?.find((wbc: any) => wbc.date === checkin.date);
     if (dupDay) {
       setErrors([{ message: "A checkin for this date already exists" }]);
       return;
     }
     const tarEmo = emotions?.find(
-      (emo: any) => emo.name === checkin.updated_emotions
+      (emo: any) => emo.name === bodyData.updated_emotions
     );
-    // TODO: This and the emotion field is kinda horse shit and needs to be updated to handle multiple emotions
+    // TODO: Update emotions to work like meals
     if (tarEmo) {
-      bodyData = {
-        ...bodyData,
-        updated_emotions: `[${JSON.stringify(tarEmo)}]`,
-      };
-    } else {
-      bodyData = {
-        ...bodyData,
-        updated_emotions: `[${JSON.stringify({
-          name: bodyData?.updated_emotions,
-        })}]`,
-      };
-    }
+      bodyData.updated_emotions = `[${JSON.stringify(tarEmo)}]`;
+    } else if (!Array.isArray(bodyData.updated_emotions)) {
+      bodyData.updated_emotions = `[${JSON.stringify({
+        name: bodyData?.updated_emotions,
+      })}]`;
+    } else
+      bodyData.updated_emotions = JSON.stringify(bodyData?.updated_emotions);
+
+    bodyData.updated_meals = JSON.stringify(bodyData?.updated_meals);
 
     const apiCall = submitter?.includes("delete")
       ? axios.delete(`${url}/${bodyData?.id}`, config)
@@ -142,19 +140,27 @@ const CheckinForm = ({
       );
     } else if (e.target.name === "meals") {
       const mealSelect = document?.getElementById(mealsId) as HTMLSelectElement;
-      const updatedMeals = selectedMeals;
-      const tarMeal = selectedMeals.indexOf(e.target.value);
-      if (tarMeal > -1) {
-        updatedMeals.splice(tarMeal, 1);
-      } else updatedMeals.push(e.target.value);
-      setSelectedMeals(updatedMeals);
+      let updatedMeals = checkin?.updated_meals ?? [];
+      const selectedMeal = updatedMeals.find(
+        (m: any) => m?.name === e.target.value
+      );
+      const tarMeal = meals?.find((m: any) => m?.name === e.target.value);
+      if (selectedMeal) {
+        updatedMeals = updatedMeals.filter(
+          (m: any) => m?.name !== e.target.value
+        );
+      } else updatedMeals.push(tarMeal);
+      setCheckin({
+        ...checkin,
+        updated_meals: updatedMeals,
+      });
       if (mealSelect) mealSelect.value = "select";
-      console.log(selectedMeals);
+    } else {
+      setCheckin({
+        ...checkin,
+        [e.target.name]: e.target.value,
+      });
     }
-    setCheckin({
-      ...checkin,
-      [e.target.name]: e.target.value,
-    });
   };
 
   function toDateInputValue(dateObject: Date) {
@@ -251,28 +257,37 @@ const CheckinForm = ({
           >
             Meals
           </label>
-          <div
-            className={cx(
-              "mb-4 mt-1",
-              errors?.includes("meals") && "ring ring-error"
-            )}
-          >
+          <div className="mb-4 mt-1">
             <select
               id={mealsId}
               name="meals"
               onChange={handleFormInput}
               defaultValue="select"
-              className="w-full bg-light p-2 h-10 border-r-8 border-transparent"
+              className={cx(
+                "w-full bg-light p-2 h-10 border-r-8 border-transparent",
+                errors?.includes("updated_meals") && "ring ring-error"
+              )}
             >
               <option disabled value="select">
                 Select
               </option>
-              {meals?.map((meal: { name: string; id: number }) => (
+              {meals?.map((meal: any) => (
                 <option key={meal?.id} value={meal?.name}>
                   {meal?.name}
                 </option>
               ))}
             </select>
+            <div className="flex justify-between flex-wrap">
+              {checkin &&
+                checkin?.updated_meals?.map((m: any) => (
+                  <div
+                    key={m?.id}
+                    className="py-1 px-2 mt-2 bg-bg-secondary text-grayscale rounded-md"
+                  >
+                    {m?.name}
+                  </div>
+                ))}
+            </div>
           </div>
           {targetCheckin && (
             <FormButton
