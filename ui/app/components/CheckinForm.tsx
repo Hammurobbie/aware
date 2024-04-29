@@ -262,7 +262,7 @@ const CheckinForm = ({
               name="meals"
               onChange={handleFormInput}
               defaultValue="select"
-              className="w-full bg-light p-2 h-10 border-r-8 border-transparent"
+              className="w-full bg-light p-2 h-10 rounded-none border-r-8 border-transparent"
             >
               <option disabled value="select">
                 Select
