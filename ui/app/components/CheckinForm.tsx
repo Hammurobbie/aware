@@ -5,6 +5,7 @@ import cx from "classnames";
 import { refresh_checkins } from "../actions";
 import FormButton from "./FormButton";
 import ConfirmSlider from "../utils/ConfirmSlider";
+import MultiItemSelect from "./MultiItemSelect";
 
 const CheckinForm = ({
   targetCheckin,
@@ -20,7 +21,7 @@ const CheckinForm = ({
         date: toDateInputValue(new Date()),
         notes: "",
         is_intermittent_fasting: false,
-        updated_emotions: null,
+        updated_emotions: [],
         updated_meals: [],
       };
   const [checkin, setCheckin] = useState(initCheckin);
@@ -28,6 +29,7 @@ const CheckinForm = ({
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
   const mealsId = `meals-select-${Math.random()}`;
+  const emotionsId = `emotions-select-${Math.random()}`;
 
   useEffect(() => {
     if (targetCheckin) setCheckin(targetCheckin);
@@ -45,7 +47,7 @@ const CheckinForm = ({
     const newErrors = [];
     if (!checkin.date && !isDelete) newErrors.push("date");
     if (!checkin.notes && !isDelete) newErrors.push("notes");
-    if (!checkin.updated_emotions && !isDelete)
+    if (!checkin.updated_emotions.length && !isDelete)
       newErrors.push("updated_emotions");
     if (!checkin.updated_meals.length && !isDelete)
       newErrors.push("updated_meals");
@@ -78,19 +80,8 @@ const CheckinForm = ({
       setErrors([{ message: "A checkin for this date already exists" }]);
       return;
     }
-    const tarEmo = emotions?.find(
-      (emo: any) => emo.name === bodyData.updated_emotions
-    );
-    // TODO: Update emotions to work like meals
-    if (tarEmo) {
-      bodyData.updated_emotions = `[${JSON.stringify(tarEmo)}]`;
-    } else if (!Array.isArray(bodyData.updated_emotions)) {
-      bodyData.updated_emotions = `[${JSON.stringify({
-        name: bodyData?.updated_emotions,
-      })}]`;
-    } else
-      bodyData.updated_emotions = JSON.stringify(bodyData?.updated_emotions);
 
+    bodyData.updated_emotions = JSON.stringify(bodyData?.updated_emotions);
     bodyData.updated_meals = JSON.stringify(bodyData?.updated_meals);
 
     const apiCall = submitter?.includes("delete")
@@ -126,6 +117,8 @@ const CheckinForm = ({
   };
 
   const handleFormInput = (e: any) => {
+    const isMeals = e.target.name === "updated_meals";
+    const isEmotions = e.target.name === "updated_emotions";
     if (errors.includes(e.target.name)) {
       setErrors(errors.filter((err) => err !== e.target.name));
     } else if (
@@ -138,23 +131,29 @@ const CheckinForm = ({
           (err) => err?.message !== "A checkin for this date already exists"
         )
       );
-    } else if (e.target.name === "meals") {
-      const mealSelect = document?.getElementById(mealsId) as HTMLSelectElement;
-      let updatedMeals = checkin?.updated_meals ?? [];
-      const selectedMeal = updatedMeals.find(
-        (m: any) => m?.name === e.target.value
+    }
+    if (isMeals || isEmotions) {
+      const tarSelect = document?.getElementById(
+        isEmotions ? emotionsId : mealsId
+      ) as HTMLSelectElement;
+      const tarProperty = isEmotions ? "updated_emotions" : "updated_meals";
+      const tarList = isEmotions ? emotions : meals;
+      let updatedTars =
+        (isEmotions ? checkin?.updated_emotions : checkin?.updated_meals) ?? [];
+      const selectedTar = updatedTars.find(
+        (t: any) => t?.name === e.target.value
       );
-      const tarMeal = meals?.find((m: any) => m?.name === e.target.value);
-      if (selectedMeal) {
-        updatedMeals = updatedMeals.filter(
+      const newTar = tarList?.find((t: any) => t?.name === e.target.value);
+      if (selectedTar) {
+        updatedTars = updatedTars.filter(
           (m: any) => m?.name !== e.target.value
         );
-      } else updatedMeals.push(tarMeal);
+      } else updatedTars.push(newTar);
       setCheckin({
         ...checkin,
-        updated_meals: updatedMeals,
+        [tarProperty]: updatedTars,
       });
-      if (mealSelect) mealSelect.value = "select";
+      if (tarSelect) tarSelect.value = "select";
     } else {
       setCheckin({
         ...checkin,
@@ -225,70 +224,20 @@ const CheckinForm = ({
             placeholder="I've never felt a negative emotion in my life"
             value={checkin?.notes}
           />
-          <label
-            className="mt-2 text-start text-bg-secondary"
-            htmlFor="updated_emotions"
-          >
-            Primary emotion
-          </label>
-          <input
-            type="text"
-            placeholder="select or add new"
-            className={cx(
-              "mb-px mt-1 bg-light p-2",
-              errors?.includes("updated_emotions") && "ring ring-error"
-            )}
-            name="updated_emotions"
-            value={checkin?.updated_emotions?.[0]?.name}
-            onChange={handleFormInput}
-            list={`updated_emotions_select-${targetCheckin?.id || ""}`}
-            autoComplete="off"
+          <MultiItemSelect
+            errors={errors}
+            emotions={emotions}
+            handleFormInput={handleFormInput}
+            emotionsId={emotionsId}
+            checkin={checkin}
           />
-          <datalist id={`updated_emotions_select-${targetCheckin?.id || ""}`}>
-            {emotions?.map((emo: { name: string; id: number }) => (
-              <option key={emo?.id} value={emo?.name}>
-                {emo?.name}
-              </option>
-            ))}
-          </datalist>
-          <label
-            className="mt-2 text-start text-bg-secondary"
-            htmlFor="updated_emotions"
-          >
-            Meals
-          </label>
-          <div className="mb-4 mt-1">
-            <select
-              id={mealsId}
-              name="meals"
-              onChange={handleFormInput}
-              defaultValue="select"
-              className={cx(
-                "w-full bg-light p-2 h-10 border-r-8 border-transparent",
-                errors?.includes("updated_meals") && "ring ring-error"
-              )}
-            >
-              <option disabled value="select">
-                Select
-              </option>
-              {meals?.map((meal: any) => (
-                <option key={meal?.id} value={meal?.name}>
-                  {meal?.name}
-                </option>
-              ))}
-            </select>
-            <div className="flex justify-between flex-wrap">
-              {checkin &&
-                checkin?.updated_meals?.map((m: any) => (
-                  <div
-                    key={m?.id}
-                    className="py-1 px-2 mt-2 bg-bg-secondary text-grayscale rounded-md"
-                  >
-                    {m?.name}
-                  </div>
-                ))}
-            </div>
-          </div>
+          <MultiItemSelect
+            errors={errors}
+            meals={meals}
+            handleFormInput={handleFormInput}
+            mealsId={mealsId}
+            checkin={checkin}
+          />
           {targetCheckin && (
             <FormButton
               id={targetCheckin?.id || "wb"}
