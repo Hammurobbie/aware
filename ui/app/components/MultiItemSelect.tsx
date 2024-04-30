@@ -39,7 +39,7 @@ const MultiItemSelect = ({
           defaultValue="select"
           className={cx(
             "w-full bg-light p-2 h-10 border-r-8 border-transparent",
-            errors?.includes(targetStr) && "ring ring-error"
+            errors?.includes(targetStr) && "!ring !ring-error"
           )}
         >
           <option disabled value="select">
