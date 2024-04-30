@@ -53,9 +53,8 @@ const MultiItemSelect = ({
         </select>
         <div className="flex justify-between flex-wrap">
           {updatedTarget?.map((tar: any) => (
-            <div className="relative">
+            <div key={tar?.id} className="relative">
               <button
-                key={tar?.id}
                 onClick={() => handleDescription(tar)}
                 className="py-1 px-2 mt-2 bg-bg-secondary text-grayscale rounded-md"
               >
