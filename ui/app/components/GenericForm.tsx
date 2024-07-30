@@ -9,6 +9,7 @@ import {
 } from "../actions";
 import FormButton from "./FormButton";
 import ConfirmSlider from "../utils/ConfirmSlider";
+import { BASE_URL } from "../utils/Constants";
 
 const GenericForm = ({
   targetData,
@@ -52,7 +53,7 @@ const GenericForm = ({
 
   const handleSubmitActivity = (e: FormEvent) => {
     e.preventDefault();
-    const url = `http://127.0.0.1:8000/${
+    const url = `${BASE_URL}${
       type === "categories" ? "activity_categories" : type
     }`;
     const config = {
@@ -176,7 +177,7 @@ const GenericForm = ({
                 name="description"
                 autoComplete="off"
                 placeholder="A tasty meal"
-                value={formData?.description}
+                value={formData?.description || ""}
               />
             </>
           )}

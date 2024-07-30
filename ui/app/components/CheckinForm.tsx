@@ -6,8 +6,10 @@ import { refresh_checkins } from "../actions";
 import FormButton from "./FormButton";
 import ConfirmSlider from "../utils/ConfirmSlider";
 import MultiItemSelect from "./MultiItemSelect";
+import { BASE_URL } from "../utils/Constants";
 
 const CheckinForm = ({
+  number,
   targetCheckin,
   emotions,
   meals,
@@ -15,6 +17,7 @@ const CheckinForm = ({
   confirmTarget,
   setConfirmTarget,
 }: any) => {
+  console.log(BASE_URL);
   const initCheckin = targetCheckin
     ? targetCheckin
     : {
@@ -28,8 +31,8 @@ const CheckinForm = ({
   const [errors, setErrors] = useState<any[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [submitter, setSubmitter] = useState("");
-  const mealsId = `meals-select-${Math.random()}`;
-  const emotionsId = `emotions-select-${Math.random()}`;
+  const mealsId = `meals-select-${number}`;
+  const emotionsId = `emotions-select-${number}`;
 
   useEffect(() => {
     if (targetCheckin) setCheckin(targetCheckin);
@@ -63,7 +66,7 @@ const CheckinForm = ({
 
   const handleSubmitActivity = (e: FormEvent) => {
     e.preventDefault();
-    const url = "http://127.0.0.1:8000/wellbeing_checks";
+    const url = `${BASE_URL}wellbeing_checks`;
     const config = {
       headers: {
         "Content-Type": "application/json",

@@ -33,6 +33,7 @@ export default function UpdateFormMapper({
       return (
         <Form
           key={i}
+          number={i + 1}
           type={type}
           targetActivity={formData}
           targetCheckin={formData}

@@ -7,6 +7,7 @@ import { refresh_categories } from "../actions";
 import FormButton from "./FormButton";
 import ConfirmSlider from "../utils/ConfirmSlider";
 import LocalDate from "../utils/LocalDate";
+import { BASE_URL } from "../utils/Constants";
 
 const ActivityForm = ({
   targetActivity,
@@ -66,7 +67,7 @@ const ActivityForm = ({
 
   const handleSubmitActivity = (e: FormEvent) => {
     e.preventDefault();
-    const url = "http://127.0.0.1:8000/activities";
+    const url = `${BASE_URL}activities`;
     const config = {
       headers: {
         "Content-Type": "application/json",

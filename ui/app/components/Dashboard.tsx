@@ -85,6 +85,7 @@ const Dashboard = ({
           })}
         />
         <CheckinForm
+          number={0}
           emotions={emotions}
           meals={meals}
           checkins={checkins}

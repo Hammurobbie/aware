@@ -14,10 +14,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# TODO: Update these after prod backend is set up
+
+@app.get("/v0/version")
+def version():
+    print("version", app.version)
+
+
+version()
+
+
 origins = [
-    "http://localhost",
-    "http://localhost:3000/",
+    "http://localhost:3000",
+    "https://aware-puce.vercel.app",
 ]
 
 app.add_middleware(
