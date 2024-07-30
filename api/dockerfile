@@ -3,8 +3,7 @@ FROM python:latest
 
 ENV PYTHONUNBUFFERED True
 ENV APP_HOME /api
-ARG API
-ENV API=${API}
+ENV NEXT_PUBLIC_API_URL='https://awarenest.fly.dev/'
 WORKDIR $APP_HOME
 COPY . ./
 
