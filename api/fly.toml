@@ -8,9 +8,6 @@ primary_region = 'bos'
 
 [build]
 
-[build.args]
-  NEXT_PUBLIC_API_URL = 'https://awarenest.fly.dev/'
-
 [http_service]
   internal_port = 8080
   force_https = true
