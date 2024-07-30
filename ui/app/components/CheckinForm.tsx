@@ -17,7 +17,7 @@ const CheckinForm = ({
   confirmTarget,
   setConfirmTarget,
 }: any) => {
-  console.log(BASE_URL);
+  console.log(BASE_URL, "|||", process.env.NODE_ENV, "|||", process.env);
   const initCheckin = targetCheckin
     ? targetCheckin
     : {
